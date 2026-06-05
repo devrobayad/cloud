@@ -1,0 +1,8 @@
+{
+  "receiverEmail": "info@cloudtechnologies.com.bd",
+  "senderEmail": "noreply@cloudtechnologies.com.bd",
+  "senderName": "Cloud Technologies CRM Portal",
+  "subjectPrefix": "[CTL Website Inquiry] ",
+  "webmailUrl": "https://webmail.cloudtechnologies.com.bd",
+  "useSmtp": false
+}

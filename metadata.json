@@ -1,0 +1,8 @@
+{
+  "name": "V8: Cloud Technologies",
+  "description": "An elegant technology solutions provider agency website offering enterprise networking, surveillance, sound systems, and communications solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
