@@ -16,18 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$dataFile = dirname(__DIR__) . '/site_data.json';
+$dataFileA = dirname(__DIR__) . '/site_data.json';
+$dataFileB = __DIR__ . '/site_data.json';
 
 // Ensure directory is writable when attempting to save
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!is_writable(dirname(__DIR__))) {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Storage directory permissions error: Directory is not writable."
-        ]);
-        exit();
-    }
-
     $rawInput = file_get_contents("php://input");
     $input = json_decode($rawInput, true);
 
@@ -41,29 +34,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Save the entire payload to site_data.json
     $jsonEncoded = json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    $saveResult = @file_put_contents($dataFile, $jsonEncoded);
+    
+    // Attempt writing to Location A (parent folder)
+    $saveResult = @file_put_contents($dataFileA, $jsonEncoded);
+    $savedPath = 'Parent directory (site_data.json)';
+    
+    // If Location A failed or is not available, try Location B (local api folder)
+    if ($saveResult === false) {
+        $saveResult = @file_put_contents($dataFileB, $jsonEncoded);
+        $savedPath = 'Local API directory (api/site_data.json)';
+    }
 
     if ($saveResult !== false) {
         echo json_encode([
             "status" => "success",
-            "message" => "All settings and configurations have been successfully saved permanently in cPanel site_data.json file!"
+            "message" => "All settings and configurations have been successfully saved permanently in cPanel " . $savedPath . "!"
         ]);
     } else {
+        $phpUser = function_exists('get_current_user') ? get_current_user() : 'unknown';
         echo json_encode([
             "status" => "error",
-            "message" => "Failed to write content to site_data.json. Check folder permissions."
+            "message" => "Failed to write content to site_data.json. Check folder permissions. Current PHP User: " . $phpUser . ". Please change folder permissions of root and 'api' folder to 755 or 777."
         ]);
     }
     exit();
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Return all stored configurations from the file
-    if (!file_exists($dataFile)) {
+    $dataContent = '';
+    if (file_exists($dataFileA)) {
+        $dataContent = @file_get_contents($dataFileA);
+    } else if (file_exists($dataFileB)) {
+        $dataContent = @file_get_contents($dataFileB);
+    }
+
+    if (empty($dataContent)) {
         echo json_encode([
             "status" => "success",
             "data" => new stdClass()
         ]);
     } else {
-        $dataContent = file_get_contents($dataFile);
         $parsedData = json_decode($dataContent, true);
         if ($parsedData === null) {
             echo json_encode([

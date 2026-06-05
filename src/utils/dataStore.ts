@@ -988,7 +988,7 @@ function saveToCPanel(): void {
     ctl_mysql_config: getStored("ctl_mysql_config", defaultMySQLConfig)
   };
 
-  fetch("/api/save-data.php", {
+  fetch("api/save-data.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -1174,7 +1174,7 @@ export const dataStore = {
   syncWithSiteDataJson: async (): Promise<{ success: boolean; message: string }> => {
     try {
       // First try to load from the modern cPanel save-data API endpoint
-      const response = await fetch(`/api/save-data.php?t=${Date.now()}`, {
+      const response = await fetch(`api/save-data.php?t=${Date.now()}`, {
         headers: { "Cache-Control": "no-cache" }
       });
       if (response.ok) {
@@ -1203,9 +1203,17 @@ export const dataStore = {
       }
       
       // Fallback: If cPanel save-data API wasn't readable or returned empty, read site_data.json directly
-      const staticResponse = await fetch(`site_data.json?t=${Date.now()}`, {
+      let staticResponse = await fetch(`site_data.json?t=${Date.now()}`, {
         headers: { "Cache-Control": "no-cache" }
       });
+      
+      if (!staticResponse.ok) {
+        // Try fallback location in the api folder
+        staticResponse = await fetch(`api/site_data.json?t=${Date.now()}`, {
+          headers: { "Cache-Control": "no-cache" }
+        });
+      }
+
       if (staticResponse.ok) {
         const payload = await staticResponse.json();
         if (payload && typeof payload === "object") {
