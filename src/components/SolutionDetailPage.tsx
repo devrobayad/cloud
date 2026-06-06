@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { dataStore } from "../utils/dataStore";
 import PageBanner from "./PageBanner";
+import ScrollReveal from "./ScrollReveal";
 import { 
   ArrowRight, 
   ChevronRight, 
@@ -1908,7 +1909,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
               type="text" 
               name="name"
               required
-              placeholder="e.g. Tanvir Rahman" 
+              placeholder="Enter your full name" 
               value={formData.name}
               onChange={handleInputChange}
               className="w-full text-xs px-3.5 py-2 rounded-xl border border-slate-200 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-slate-50/50"
@@ -1922,7 +1923,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
             <input 
               type="text" 
               name="company"
-              placeholder="e.g. RS Solutions Ltd" 
+              placeholder="Enter your company name" 
               value={formData.company}
               onChange={handleInputChange}
               className="w-full text-xs px-3.5 py-2 rounded-xl border border-slate-200 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-slate-50/50"
@@ -1938,7 +1939,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
                 type="email" 
                 name="email"
                 required
-                placeholder="name@email.com" 
+                placeholder="Enter your corporate email" 
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-slate-50/50"
@@ -1952,7 +1953,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
                 type="tel" 
                 name="phone"
                 required
-                placeholder="+88017..." 
+                placeholder="Enter your mobile phone number" 
                 value={formData.phone}
                 onChange={handleInputChange}
                 className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-slate-50/50"
@@ -1967,7 +1968,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
             <textarea 
               name="message"
               rows={2}
-              placeholder="e.g. Setup boardroom AV matrix switcher, 12 mics..." 
+              placeholder="Enter your requirement details" 
               value={formData.message}
               onChange={handleInputChange}
               className="w-full text-xs px-3.5 py-2 rounded-xl border border-slate-200 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-slate-50/50 resize-none h-16"
@@ -2037,109 +2038,124 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
     <div id="main-solutions-content" className="flex flex-col gap-10">
       
       {/* Large Featured Visual representation */}
-      <div className="relative h-[250px] sm:h-[400px] rounded-3xl overflow-hidden shadow-lg group border border-white bg-slate-200">
-        <img 
-          src={currentSolution.image} 
-          alt={currentSolution.title} 
-          className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-        
-        {/* Overlay Badge */}
-        <div className="absolute bottom-6 left-6 right-6 flex flex-wrap justify-between items-end gap-4">
-          <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white max-w-md">
-            <p className="text-xs font-bold uppercase tracking-wider text-indigo-300">Technology Focus</p>
-            <p className="text-sm font-semibold mt-0.5">High Performance, Certified Installs & Turnkey Delivery</p>
+      <ScrollReveal direction="up" duration={0.6}>
+        <div className="relative h-[250px] sm:h-[400px] rounded-3xl overflow-hidden shadow-lg group border border-white bg-slate-200">
+          <img 
+            src={currentSolution.image} 
+            alt={currentSolution.title} 
+            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+          
+          {/* Overlay Badge */}
+          <div className="absolute bottom-6 left-6 right-6 flex flex-wrap justify-between items-end gap-4">
+            <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white max-w-md">
+              <p className="text-xs font-bold uppercase tracking-wider text-indigo-300">Technology Focus</p>
+              <p className="text-sm font-semibold mt-0.5">High Performance, Certified Installs & Turnkey Delivery</p>
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* Overview Section */}
-      <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
-          <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Overview & Methodology
-          </h2>
+      <ScrollReveal direction="up" duration={0.6} delay={0.1}>
+        <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+            <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Overview & Methodology
+            </h2>
+          </div>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans font-medium">
+            {currentSolution.overview}
+          </p>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans mt-1">
+            At Cloud Technologies, we don't believe in generic off-the-shelf system packages. We conduct complete engineering evaluations on site acoustics, light, bandwidth, and cabling layouts to tailor the solution specific to your organizational goals. This holistic approach guarantees an installation that functions reliably with high performance.
+          </p>
         </div>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans font-medium">
-          {currentSolution.overview}
-        </p>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans mt-1">
-          At Cloud Technologies, we don't believe in generic off-the-shelf system packages. We conduct complete engineering evaluations on site acoustics, light, bandwidth, and cabling layouts to tailor the solution specific to your organizational goals. This holistic approach guarantees an installation that functions reliably with high performance.
-        </p>
-      </div>
+      </ScrollReveal>
 
       {/* Key Features & Deliverables Section */}
       <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
-          <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Key Features & Deliverables
-          </h2>
-        </div>
+        <ScrollReveal direction="up" duration={0.6}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+            <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Key Features & Deliverables
+            </h2>
+          </div>
+        </ScrollReveal>
         
         {/* Features grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {currentSolution.features.map((item, index) => (
-            <div 
-              key={index} 
-              className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-indigo-100 group transition-all duration-300 flex flex-col gap-2"
+            <ScrollReveal
+              key={index}
+              direction="up"
+              duration={0.6}
+              delay={(index % 2) * 0.1}
+              className="flex h-full"
             >
-              <div className="flex items-center gap-2.5">
-                <span className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                  <CheckCircle2 className="w-4 h-4" />
-                </span>
-                <h3 className="font-extrabold text-slate-900 text-sm md:text-base tracking-tight">
-                  {item.title}
-                </h3>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:border-indigo-100 group transition-all duration-300 flex flex-col gap-2 w-full">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </span>
+                  <h3 className="font-extrabold text-slate-900 text-sm md:text-base tracking-tight">
+                    {item.title}
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                {item.desc}
-              </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
 
       {/* Typical Applications & Industries served */}
-      <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
-          <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Typical Applications & Industries Served
-          </h2>
+      <ScrollReveal direction="up" duration={0.6}>
+        <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+            <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Typical Applications & Industries Served
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {currentSolution.applications.map((app, index) => (
+              <div key={index} className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 flex-shrink-0" />
+                <span className="text-slate-700 text-xs sm:text-sm font-bold font-sans">
+                  {app}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {currentSolution.applications.map((app, index) => (
-            <div key={index} className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 flex-shrink-0" />
-              <span className="text-slate-700 text-xs sm:text-sm font-bold font-sans">
-                {app}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      </ScrollReveal>
 
       {/* Tech Specs block */}
-      <div className="bg-[#1e1b4b] p-6 sm:p-10 rounded-3xl text-white shadow-md flex flex-col gap-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-400" />
-          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight font-display text-white">
-            Technical System Parameters
-          </h2>
+      <ScrollReveal direction="up" duration={0.6} delay={0.1}>
+        <div className="bg-[#1e1b4b] p-6 sm:p-10 rounded-3xl text-white shadow-md flex flex-col gap-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-400" />
+            <h2 className="text-lg sm:text-xl font-extrabold tracking-tight font-display text-white">
+              Technical System Parameters
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {currentSolution.techSpecs.map((spec, index) => (
+              <div key={index} className="flex flex-col pb-4 border-b border-indigo-950/40">
+                <span className="text-xs text-indigo-300 font-semibold tracking-wider uppercase mb-1">{spec.label}</span>
+                <span className="text-sm font-bold text-slate-100">{spec.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {currentSolution.techSpecs.map((spec, index) => (
-            <div key={index} className="flex flex-col pb-4 border-b border-indigo-950/40">
-              <span className="text-xs text-indigo-300 font-semibold tracking-wider uppercase mb-1">{spec.label}</span>
-              <span className="text-sm font-bold text-slate-100">{spec.value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      </ScrollReveal>
 
     </div>
   );

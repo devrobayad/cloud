@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Calendar, ArrowRight, X, FileText } from "lucide-react";
 import PageBanner from "./PageBanner";
 import { dataStore, ProjectItem } from "../utils/dataStore";
+import ScrollReveal from "./ScrollReveal";
 
 export default function CompletedProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
@@ -22,25 +23,34 @@ export default function CompletedProjectsPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projectsList.map((project) => (
-            <div
+          {projectsList.map((project, index) => (
+            <ScrollReveal
               key={project.id}
-              onClick={() => setSelectedProject(project)}
-              className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 cursor-pointer"
+              direction="up"
+              duration={0.6}
+              delay={(index % 3) * 0.1}
+              className="flex h-full"
             >
-              <div className="h-48 w-full overflow-hidden">
-                <img src={project.image} alt={project.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div className="p-6">
-                <div className="text-emerald-600 text-xs font-bold uppercase mb-2">{project.category}</div>
-                <h3 className="font-bold text-slate-800 text-lg mb-2">{project.title}</h3>
-                <p className="text-slate-500 text-sm mb-4 line-clamp-2">{project.summary}</p>
-                <div className="flex items-center gap-1.5 text-indigo-600 font-extrabold text-xs">
-                  <span>View Details</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+              <div
+                onClick={() => setSelectedProject(project)}
+                className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 cursor-pointer w-full"
+              >
+                <div className="h-48 w-full overflow-hidden">
+                  <img src={project.image} alt={project.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <div className="p-6 flex-grow flex flex-col justify-between">
+                  <div>
+                    <div className="text-emerald-600 text-xs font-bold uppercase mb-2">{project.category}</div>
+                    <h3 className="font-bold text-slate-800 text-base mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">{project.title}</h3>
+                    <p className="text-slate-500 text-xs mb-4 line-clamp-2 leading-relaxed">{project.summary}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-indigo-600 font-extrabold text-xs pt-2 border-t border-slate-55 select-none">
+                    <span>View Details</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

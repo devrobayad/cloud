@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { ArrowRight, X, Calendar, Award, Globe, FileText } from "lucide-react";
+import { ArrowRight, X, Calendar, Award, FileText } from "lucide-react";
 import PageBanner from "./PageBanner";
 import { dataStore, NewsItem } from "../utils/dataStore";
+import ScrollReveal from "./ScrollReveal";
 
 export default function News() {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
@@ -23,85 +24,92 @@ export default function News() {
       {/* 2. News Cards Area */}
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-          {newsList.map((news) => (
-            <div
+          {newsList.map((news, idx) => (
+            <ScrollReveal
               key={news.id}
-              onClick={() => setSelectedNews(news)}
-              className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-100 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer"
+              direction="up"
+              duration={0.6}
+              delay={idx * 0.1}
+              className="flex h-full"
             >
-              {/* Image Container */}
-              <div className="relative h-56 w-full overflow-hidden bg-[#0a0d24]">
-                {news.isCustomGraphic ? (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#0c0f2a] to-[#171c4c] text-center select-none overflow-hidden">
-                    {/* Abstract Grid background */}
-                    <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                    
-                    {/* Olympic styled connected rings */}
-                    <div className="relative z-10 flex items-center justify-center gap-1.5 mb-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-blue-500 flex items-center justify-center"></div>
-                      <div className="w-5 h-5 rounded-full border-2 border-yellow-500 -ml-2.5 mt-2.5 flex items-center justify-center"></div>
-                      <div className="w-5 h-5 rounded-full border-2 border-slate-300 -ml-2.5 flex items-center justify-center"></div>
-                      <div className="w-5 h-5 rounded-full border-2 border-green-500 -ml-2.5 mt-2.5 flex items-center justify-center"></div>
-                      <div className="w-5 h-5 rounded-full border-2 border-red-500 -ml-2.5 flex items-center justify-center"></div>
+              <div
+                onClick={() => setSelectedNews(news)}
+                className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-100 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer w-full"
+              >
+                {/* Image Container */}
+                <div className="relative h-56 w-full overflow-hidden bg-[#0a0d24]">
+                  {news.isCustomGraphic ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#0c0f2a] to-[#171c4c] text-center select-none overflow-hidden">
+                      {/* Abstract Grid background */}
+                      <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                      
+                      {/* Olympic styled connected rings */}
+                      <div className="relative z-10 flex items-center justify-center gap-1.5 mb-3">
+                        <div className="w-5 h-5 rounded-full border-2 border-blue-500 flex items-center justify-center"></div>
+                        <div className="w-5 h-5 rounded-full border-2 border-yellow-500 -ml-2.5 mt-2.5 flex items-center justify-center"></div>
+                        <div className="w-5 h-5 rounded-full border-2 border-slate-300 -ml-2.5 flex items-center justify-center"></div>
+                        <div className="w-5 h-5 rounded-full border-2 border-green-500 -ml-2.5 mt-2.5 flex items-center justify-center"></div>
+                        <div className="w-5 h-5 rounded-full border-2 border-red-500 -ml-2.5 flex items-center justify-center"></div>
+                      </div>
+                      
+                      <h4 className="relative z-10 text-[11px] font-bold tracking-[0.2em] text-cyan-400 uppercase">
+                        International
+                      </h4>
+                      <h3 className="relative z-10 text-white font-extrabold text-base tracking-wide mt-1">
+                        Blockchain Olympiad
+                      </h3>
+                      
+                      {/* Divider line */}
+                      <div className="relative z-10 w-24 h-px bg-slate-600 my-2"></div>
+                      
+                      <span className="relative z-10 text-amber-400 font-extrabold text-xs tracking-wider">
+                        8-10 October 2021
+                      </span>
                     </div>
-                    
-                    <h4 className="relative z-10 text-[11px] font-bold tracking-[0.2em] text-cyan-400 uppercase">
-                      International
-                    </h4>
-                    <h3 className="relative z-10 text-white font-extrabold text-base tracking-wide mt-1">
-                      Blockchain Olympiad
+                  ) : (
+                    <img
+                      src={news.image}
+                      alt={news.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
+
+                  {/* Badge Category Overlay info */}
+                  <div className="absolute top-4 left-4 bg-black/45 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full z-10 select-none">
+                    {news.category}
+                  </div>
+
+                  {/* The unique theme circle badge at bottom right as requested */}
+                  <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-[#121632]/80 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                  </div>
+                </div>
+
+                {/* Title & Underline controls */}
+                <div className="p-6 flex flex-col justify-between flex-grow">
+                  <div>
+                    {/* News date info */}
+                    <div className="flex items-center gap-1 text-slate-400 text-xs mb-2 select-none">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{news.date}</span>
+                    </div>
+                    <h3 className="text-slate-800 font-bold text-sm sm:text-base leading-relaxed tracking-wide hover:text-indigo-600 transition-colors line-clamp-3">
+                      {news.title}
                     </h3>
-                    
-                    {/* Divider line */}
-                    <div className="relative z-10 w-24 h-px bg-slate-600 my-2"></div>
-                    
-                    <span className="relative z-10 text-amber-400 font-extrabold text-xs tracking-wider">
-                      8-10 October 2021
-                    </span>
+                    <p className="text-slate-500 text-xs leading-relaxed mt-2.5 line-clamp-2">
+                      {news.summary}
+                    </p>
                   </div>
-                ) : (
-                  <img
-                    src={news.image}
-                    alt={news.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                )}
 
-                {/* Badge Category Overlay info */}
-                <div className="absolute top-4 left-4 bg-black/45 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full z-10 select-none">
-                  {news.category}
-                </div>
-
-                {/* The unique theme circle badge at bottom right as requested */}
-                <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-[#121632]/80 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                  {/* Read more button link */}
+                  <div className="flex items-center gap-1.5 text-indigo-600 group-hover:text-indigo-800 font-extrabold text-xs mt-6 transition-colors select-none">
+                    <span>Read more</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                  </div>
                 </div>
               </div>
-
-              {/* Title & Underline controls */}
-              <div className="p-6 flex flex-col justify-between flex-grow">
-                <div>
-                  {/* News date info */}
-                  <div className="flex items-center gap-1 text-slate-400 text-xs mb-2 select-none">
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{news.date}</span>
-                  </div>
-                  <h3 className="text-slate-800 font-bold text-sm sm:text-base leading-relaxed tracking-wide hover:text-indigo-600 transition-colors line-clamp-3">
-                    {news.title}
-                  </h3>
-                  <p className="text-slate-500 text-xs leading-relaxed mt-2.5 line-clamp-2">
-                    {news.summary}
-                  </p>
-                </div>
-
-                {/* Read more button link */}
-                <div className="flex items-center gap-1.5 text-indigo-600 group-hover:text-indigo-800 font-extrabold text-xs mt-6 transition-colors select-none">
-                  <span>Read more</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
-                </div>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -180,6 +188,7 @@ export default function News() {
                 <p className="text-slate-600 text-xs sm:text-sm leading-relaxed tracking-wide whitespace-pre-line my-1">
                   {selectedNews.description}
                 </p>
+
               </div>
 
             </div>
@@ -202,4 +211,3 @@ export default function News() {
     </section>
   );
 }
-

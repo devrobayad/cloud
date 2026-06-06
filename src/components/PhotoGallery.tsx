@@ -3,6 +3,7 @@ import { Project } from "../types";
 import { Camera, Image as ImageIcon, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import PageBanner from "./PageBanner";
 import { dataStore } from "../utils/dataStore";
+import ScrollReveal from "./ScrollReveal";
 
 const projects: Project[] = [
   {
@@ -170,83 +171,94 @@ export default function PhotoGallery() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         
         {/* Page Title & Breadcrumb */}
-        <div className="flex flex-col gap-3 mb-10 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-2 text-indigo-600 font-extrabold uppercase tracking-widest text-[11px] font-sans">
-            <Camera className="w-4 h-4 text-indigo-600 animate-pulse" />
-            <span>Interactive Portfolio</span>
+        <ScrollReveal direction="up" duration={0.6}>
+          <div className="flex flex-col gap-3 mb-10 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-indigo-600 font-extrabold uppercase tracking-widest text-[11px] font-sans">
+              <Camera className="w-4 h-4 text-indigo-600 animate-pulse" />
+              <span>Interactive Portfolio</span>
+            </div>
+            <p className="text-slate-500 text-sm md:text-base leading-relaxed max-w-2xl">
+              Explore authentic visual logs showcasing our high-profile enterprise security, networking, professional sound systems, and fiber backbone installation fields in Bangladesh.
+            </p>
           </div>
-          <p className="text-slate-500 text-sm md:text-base leading-relaxed max-w-2xl">
-            Explore authentic visual logs showcasing our high-profile enterprise security, networking, professional sound systems, and fiber backbone installation fields in Bangladesh.
-          </p>
-        </div>
+        </ScrollReveal>
 
         {/* Filter Navigation Bar */}
         {!selectedProject && (
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm max-w-max">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-tight transition-all cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+          <ScrollReveal direction="up" duration={0.6} delay={0.1}>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm max-w-max">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold tracking-tight transition-all cursor-pointer ${
+                    selectedCategory === cat.id
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </ScrollReveal>
         )}
 
         {/* Grid Layout of Projects */}
         {!selectedProject ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProjects.map((project) => (
-              <div
+            {filteredProjects.map((project, index) => (
+              <ScrollReveal
                 key={project.id}
-                onClick={() => setSelectedProject(project)}
-                className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
+                direction="up"
+                duration={0.6}
+                delay={(index % 4) * 0.08}
+                className="flex h-full"
               >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden bg-slate-100">
-                  <img
-                    src={project.images[0]}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                  
-                  <span className="absolute top-3 left-3 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-slate-900/80 backdrop-blur-md text-white rounded-md">
-                    {project.categoryLabel}
-                  </span>
-                  
-                  <div className="absolute top-3 right-3 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-white/90 text-indigo-900 rounded-md">
-                    {project.images.length} Photos
-                  </div>
-                </div>
-
-                <div className="p-5 flex-grow flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-slate-900 font-extrabold text-sm leading-snug tracking-tight mb-2 group-hover:text-indigo-600 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed mb-4">
-                      {project.description}
-                    </p>
+                <div
+                  onClick={() => setSelectedProject(project)}
+                  className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between w-full"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden bg-slate-100">
+                    <img
+                      src={project.images[0]}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                    />
+                    
+                    <span className="absolute top-3 left-3 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-slate-900/80 backdrop-blur-md text-white rounded-md">
+                      {project.categoryLabel}
+                    </span>
+                    
+                    <div className="absolute top-3 right-3 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider bg-white/90 text-indigo-900 rounded-md">
+                      {project.images.length} Photos
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-50 text-[10px] text-slate-400 font-bold">
-                    <span className="text-indigo-600 uppercase tracking-tight truncate max-w-[120px]">
-                      {project.client}
-                    </span>
-                    <span className="truncate max-w-[100px]">
-                      {project.location}
-                    </span>
+                  <div className="p-5 flex-grow flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-slate-900 font-extrabold text-sm leading-snug tracking-tight mb-2 group-hover:text-indigo-600 transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed mb-4">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-50 text-[10px] text-slate-400 font-bold">
+                      <span className="text-indigo-600 uppercase tracking-tight truncate max-w-[120px]">
+                        {project.client}
+                      </span>
+                      <span className="truncate max-w-[100px]">
+                        {project.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         ) : (

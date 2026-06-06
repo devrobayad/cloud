@@ -1081,8 +1081,8 @@ export default function AdminPanel() {
 
   const handleSaveSlide = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!slideForm.title || !slideForm.tag || !slideForm.image) {
-      alert("Please fill in key fields: Title, Tag, and Image are required.");
+    if (!slideForm.image) {
+      alert("Please select or upload a slider background image.");
       return;
     }
 
@@ -4718,55 +4718,51 @@ export default function AdminPanel() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-sans">
                       <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Slide Tag / Badge Text</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Slide Tag / Badge Text (Optional)</label>
                         <input
                           type="text"
-                          required
                           value={slideForm.tag}
                           onChange={(e) => setSlideForm({ ...slideForm, tag: e.target.value })}
                           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                          placeholder="e.g. Enterprise System Integrator"
+                          placeholder="e.g. Enterprise System Integrator (leave blank to hide)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Button Call to Action (CTA) Text</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Button Call to Action (CTA) Text (Optional)</label>
                         <input
                           type="text"
-                          required
                           value={slideForm.cta}
                           onChange={(e) => setSlideForm({ ...slideForm, cta: e.target.value })}
                           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                          placeholder="e.g. Explore Our Solutions"
+                          placeholder="e.g. Explore Our Solutions (leave blank to hide)"
                         />
                       </div>
 
                       <div className="md:col-span-2">
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Slide Display Heading / Title</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Slide Display Heading / Title (Optional)</label>
                         <input
                           type="text"
-                          required
                           value={slideForm.title}
                           onChange={(e) => setSlideForm({ ...slideForm, title: e.target.value })}
                           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                          placeholder="e.g. Intelligence Beyond Security"
+                          placeholder="e.g. Intelligence Beyond Security (leave blank to hide)"
                         />
                       </div>
 
                       <div className="md:col-span-2">
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Description Statement</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Description Statement (Optional)</label>
                         <textarea
                           rows={3}
-                          required
                           value={slideForm.description}
                           onChange={(e) => setSlideForm({ ...slideForm, description: e.target.value })}
                           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                          placeholder="Provide a compelling details snippet describing this solution slide..."
+                          placeholder="Provide a compelling details snippet describing this solution slide... (leave blank to hide)"
                         />
                       </div>
 
                       <div className="md:col-span-2">
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Background Hero Image (URL or Local Upload File)</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5">Background Hero Image (URL or Local Upload File) <span className="text-red-500 font-bold">*</span></label>
                         <div className="flex gap-4">
                           <input
                             type="text"

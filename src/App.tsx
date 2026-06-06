@@ -35,6 +35,7 @@ import TermsOfUsePage from "./components/TermsOfUsePage";
 import AdminPanel from "./components/AdminPanel";
 import { dataStore } from "./utils/dataStore";
 import Preloader from "./components/Preloader";
+import CustomCursor from "./components/CustomCursor";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<string>("home");
@@ -183,6 +184,9 @@ export default function App() {
 
   return (
     <div className="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+      {/* Premium Desktop Cursor Follower */}
+      <CustomCursor />
+
       {/* Page Preloader */}
       <Preloader key={`site-preloader-${loadTrigger}`} />
 

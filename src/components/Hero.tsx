@@ -37,14 +37,14 @@ export default function Hero() {
 
   if (!slides || slides.length === 0) {
     return (
-      <section id="home" className="relative w-full h-screen bg-slate-950 flex items-center justify-center text-white">
+      <section id="home" className="relative w-full h-[450px] md:h-[500px] lg:h-screen bg-slate-950 flex items-center justify-center text-white">
         <p className="text-sm text-slate-400 font-mono">No slides found. Add one in the Admin Panel!</p>
       </section>
     );
   }
 
   return (
-    <section id="home" className="relative w-full h-screen overflow-hidden bg-slate-950 select-none">
+    <section id="home" className="relative w-full h-[450px] md:h-[500px] lg:h-screen overflow-hidden bg-slate-950 select-none">
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
@@ -67,58 +67,70 @@ export default function Hero() {
 
           {/* Slide Text Content Container */}
           <div className="absolute inset-0 flex items-center">
-            <div className="max-w-7xl mx-auto w-full px-6 md:px-12 flex flex-col items-start gap-4 md:gap-6 pt-16">
+            <div className="max-w-7xl mx-auto w-full px-6 md:px-12 flex flex-col items-start gap-3 lg:gap-6 pt-10 md:pt-14 lg:pt-24">
               {/* Animating Slide Category/Tag */}
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="flex items-center gap-2 bg-indigo-600/90 text-white px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg shadow-indigo-600/20 backdrop-blur-sm"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                {slides[current].tag}
-              </motion.div>
+              {slides[current].tag && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="flex items-center gap-2 bg-indigo-600/90 text-white px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider shadow-lg shadow-indigo-600/20 backdrop-blur-sm"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {slides[current].tag}
+                </motion.div>
+              )}
 
               {/* Animating Slide Title */}
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-3xl sm:text-4.5xl md:text-5.5xl lg:text-6.5xl font-extrabold text-white tracking-tight leading-tight max-w-3xl drop-shadow-md font-display"
-              >
-                {slides[current].title}
-              </motion.h1>
+              {slides[current].title && (
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5.5xl xl:text-6.5xl font-extrabold text-white tracking-tight leading-tight max-w-3xl drop-shadow-md font-display"
+                >
+                  {slides[current].title}
+                </motion.h1>
+              )}
 
               {/* Animating Description */}
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-slate-200 text-sm md:text-lg max-w-lg leading-relaxed font-sans drop-shadow-sm font-medium"
-              >
-                {slides[current].description}
-              </motion.p>
+              {slides[current].description && (
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-slate-200 text-xs sm:text-sm lg:text-lg max-w-lg leading-relaxed font-sans drop-shadow-sm font-medium line-clamp-3 md:line-clamp-none"
+                >
+                  {slides[current].description}
+                </motion.p>
+              )}
 
               {/* Animating Call To Action Buttons */}
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="flex items-center gap-4 mt-2"
-              >
-                <a 
-                  href="#contact"
-                  className="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-95 text-white text-xs md:text-sm font-bold rounded-full transition-all shadow-xl shadow-indigo-700/20 cursor-pointer"
+              {(slides[current].cta || slides[current].title) && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="flex items-center gap-3 mt-2 lg:mt-4"
                 >
-                  {slides[current].cta}
-                </a>
-                <a 
-                  href="#solutions"
-                  className="px-6 py-3.5 bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 text-white text-xs md:text-sm font-bold rounded-full transition-all border border-white/20 backdrop-blur-sm cursor-pointer"
-                >
-                  Our Solutions
-                </a>
-              </motion.div>
+                  {slides[current].cta && (
+                    <a 
+                      href="#contact"
+                      className="px-5 py-2.5 lg:px-6 lg:py-3.5 bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-95 text-xs lg:text-sm font-bold rounded-full transition-all shadow-xl shadow-indigo-700/20 cursor-pointer"
+                    >
+                      {slides[current].cta}
+                    </a>
+                  )}
+                  {slides[current].title && (
+                    <a 
+                      href="#solutions"
+                      className="px-5 py-2.5 lg:px-6 lg:py-3.5 bg-slate-900/90 hover:bg-slate-950 border border-slate-700 hover:border-slate-500 text-white shadow-xl backdrop-blur-md rounded-full transition-all cursor-pointer font-bold flex items-center"
+                    >
+                      Our Solutions
+                    </a>
+                  )}
+                </motion.div>
+              )}
             </div>
           </div>
         </motion.div>

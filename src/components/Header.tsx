@@ -39,6 +39,23 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [header, setHeader] = useState(() => dataStore.getHeaderConfig());
 
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
+
+  const toggleMenu = (name: string) => {
+    setExpandedMenu(expandedMenu === name ? null : name);
+  };
+
+  const toggleSubmenu = (name: string) => {
+    setExpandedSubmenu(expandedSubmenu === name ? null : name);
+  };
+
+  const closeDrawer = () => {
+    setIsOpen(false);
+    setExpandedMenu(null);
+    setExpandedSubmenu(null);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -229,124 +246,200 @@ export default function Header() {
 
         {/* Mobile Toggle Button */}
         <div className="flex items-center gap-3 xl:hidden">
-          {header.buttons && header.buttons.map((btn) => (
-            <a
-              key={btn.id}
-              href={btn.url} 
-              className="px-3 py-1.5 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-full inline-block"
-              target={btn.isOpenNewTab ? "_blank" : "_self"}
-              rel="noopener noreferrer"
-            >
-              {btn.labelText}
-            </a>
-          ))}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer - Immersive same-to-same design with the header photo */}
       {isOpen && (
-        <div className="xl:hidden mt-2 max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 p-4 transition-all duration-300 max-h-[75vh] overflow-y-auto">
-          <nav className="flex flex-col gap-2">
-            {menuItems.map((item) => (
-              <div key={item.name} className="flex flex-col gap-1">
-                <a
-                  href={item.href}
-                  onClick={(e) => {
-                    const id = item.href.replace("#", "");
-                    const isPageRoute = isSubpageId(id);
-                    const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
-
-                    if (!isPageRoute && !wasPageRoute) {
-                      e.preventDefault();
-                      setIsOpen(false);
-                      const element = document.getElementById(id);
-                      if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                      }
-                      window.location.hash = item.href;
-                    } else {
-                      setIsOpen(false);
-                      window.location.hash = item.href;
-                    }
-                  }}
-                  className="w-full text-left px-4 py-2 text-slate-800 hover:bg-slate-50 hover:text-indigo-600 rounded-lg font-extrabold text-xs tracking-tight transition-all"
-                >
-                  {item.name}
-                </a>
-
-                {item.hasDropdown && item.dropdownItems && (
-                  <div className="pl-4 border-l border-slate-100 flex flex-col gap-1.5 mb-1 bg-slate-50/50 py-1 rounded">
-                    {item.dropdownItems.map((subItem) => (
-                      <div key={subItem.name} className="flex flex-col">
-                        <a
-                          href={subItem.href}
-                          onClick={(e) => {
-                            const subId = subItem.href.replace("#", "");
-                            const isPageRoute = isSubpageId(subId);
-                            const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
-
-                            if (!isPageRoute && !wasPageRoute) {
-                              e.preventDefault();
-                              setIsOpen(false);
-                              const element = document.getElementById(subId);
-                              if (element) {
-                                element.scrollIntoView({ behavior: "smooth" });
-                              }
-                              window.location.hash = subItem.href;
-                            } else {
-                              setIsOpen(false);
-                              window.location.hash = subItem.href;
-                            }
-                          }}
-                          className="px-4 py-1.5 text-xs text-slate-600 hover:text-indigo-600 rounded font-semibold transition-all"
-                        >
-                          • {subItem.name}
-                        </a>
-                        
-                        {subItem.hasSubmenu && subItem.submenuItems && (
-                          <div className="pl-4 ml-4 border-l border-slate-200/60 flex flex-col gap-1 mt-0.5 mb-1.5 py-0.5">
-                            {subItem.submenuItems.map((nestedItem) => (
-                              <a
-                                key={nestedItem.name}
-                                href={nestedItem.href}
-                                onClick={(e) => {
-                                  const nestedId = nestedItem.href.replace("#", "");
-                                  const isPageRoute = isSubpageId(nestedId);
-                                  const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
-
-                                  if (!isPageRoute && !wasPageRoute) {
-                                    e.preventDefault();
-                                    setIsOpen(false);
-                                    const element = document.getElementById(nestedId);
-                                    if (element) {
-                                      element.scrollIntoView({ behavior: "smooth" });
-                                    }
-                                    window.location.hash = nestedItem.href;
-                                  } else {
-                                    setIsOpen(false);
-                                    window.location.hash = nestedItem.href;
-                                  }
-                                }}
-                                className="px-3 py-1 text-[11px] text-slate-500 hover:text-indigo-600 rounded font-medium transition-all"
-                              >
-                                — {nestedItem.name}
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
+        <div className="fixed inset-0 z-[100] bg-[#16143c] xl:hidden flex flex-col overflow-hidden animate-in fade-in slide-in-from-top duration-300">
+          {/* Top Row: Brand Logo Panel (White BG) and Custom Dark Close Button */}
+          <div className="bg-white px-5 py-4 flex items-center justify-between border-b border-slate-100 shadow-sm">
+            {/* Logo Layout */}
+            <div 
+              className="flex items-center gap-2.5 cursor-pointer" 
+              onClick={() => { 
+                closeDrawer(); 
+                window.location.hash = "#home"; 
+              }}
+            >
+              {header.logoUrl ? (
+                <img src={header.logoUrl} alt={header.logoText} className="h-10 w-auto object-contain rounded-lg" referrerPolicy="no-referrer" />
+              ) : (
+                <div className="bg-gradient-to-tr from-slate-900 to-indigo-950 text-white p-2 rounded-xl flex items-center justify-center shadow-md">
+                  <span className="font-extrabold text-sm tracking-wider font-sans select-none">{header.logoText}</span>
+                </div>
+              )}
+              <div className="flex flex-col">
+                <span className="text-slate-900 font-extrabold text-xs md:text-sm tracking-tight leading-none">
+                  {header.companyNameRow1}
+                </span>
+                <span className="text-slate-500 font-semibold text-[7px] md:text-[9px] tracking-widest leading-none mt-1 uppercase">
+                  {header.companyNameRow2}
+                </span>
               </div>
-            ))}
-          </nav>
+            </div>
+
+            {/* Premium Dark Navy Rounded Close Button with white close icon */}
+            <button
+              onClick={closeDrawer}
+              className="p-3 bg-[#1a1844] hover:bg-[#25215c] text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center transform active:scale-95"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5 stroke-[2.5]" />
+            </button>
+          </div>
+
+          {/* Scrolling Corporate Dark Navy List Menu panel */}
+          <div className="flex-1 bg-[#1a1844] overflow-y-auto px-5 py-4 pb-12">
+            <nav className="flex flex-col">
+              {menuItems.map((item) => {
+                const isExpanded = expandedMenu === item.name;
+                return (
+                  <div key={item.name} className="border-b border-white/5 py-1">
+                    {/* Level 1 Parent Link / Accordion Control Button */}
+                    {item.hasDropdown && item.dropdownItems && item.dropdownItems.length > 0 ? (
+                      <button
+                        onClick={() => toggleMenu(item.name)}
+                        className="w-full flex items-center justify-between py-3 px-4 text-left font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all cursor-pointer text-xs sm:text-sm tracking-wide"
+                      >
+                        <span className="tracking-tight uppercase">{item.name}</span>
+                        <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+                      </button>
+                    ) : (
+                      <a
+                        href={item.href}
+                        onClick={(e) => {
+                          const id = item.href.replace("#", "");
+                          const isPageRoute = isSubpageId(id);
+                          const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
+
+                          if (!isPageRoute && !wasPageRoute) {
+                            e.preventDefault();
+                            closeDrawer();
+                            const element = document.getElementById(id);
+                            if (element) {
+                              element.scrollIntoView({ behavior: "smooth" });
+                            }
+                            window.location.hash = item.href;
+                          } else {
+                            closeDrawer();
+                            window.location.hash = item.href;
+                          }
+                        }}
+                        className="block py-3 px-4 font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all text-xs sm:text-sm tracking-wide"
+                      >
+                        <span className="tracking-tight uppercase">{item.name}</span>
+                      </a>
+                    )}
+
+                    {/* Level 2 Submenus container (Initially Closed, toggles on parent click) */}
+                    {item.hasDropdown && item.dropdownItems && isExpanded && (
+                      <div className="mt-1 ml-4 pl-3 border-l-2 border-indigo-500/40   flex flex-col gap-1 py-1.5 bg-[#131135]/80 rounded-xl overflow-hidden transition-all duration-300">
+                        {item.dropdownItems.map((subItem) => {
+                          const isSubExpanded = expandedSubmenu === subItem.name;
+                          return (
+                            <div key={subItem.name} className="flex flex-col">
+                              {subItem.hasSubmenu && subItem.submenuItems && subItem.submenuItems.length > 0 ? (
+                                <>
+                                  {/* Submenu Trigger (Closed by default, click opens it) */}
+                                  <button
+                                    onClick={() => toggleSubmenu(subItem.name)}
+                                    className="w-full flex items-center justify-between px-4 py-2.5 text-xs text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all cursor-pointer font-bold"
+                                  >
+                                    <span>• {subItem.name}</span>
+                                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-300 ${isSubExpanded ? "rotate-180" : ""}`} />
+                                  </button>
+
+                                  {/* Level 3 Sub-submenu Items (Initially Closed, toggles on click) */}
+                                  {isSubExpanded && (
+                                    <div className="ml-5 pl-3 mt-1 mb-1 border-l border-indigo-400/30 flex flex-col gap-1.5 py-1 bg-[#100e2b]/95 rounded-lg">
+                                      {subItem.submenuItems.map((nestedItem) => (
+                                        <a
+                                          key={nestedItem.name}
+                                          href={nestedItem.href}
+                                          onClick={(e) => {
+                                            const nestedId = nestedItem.href.replace("#", "");
+                                            const isPageRoute = isSubpageId(nestedId);
+                                            const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
+
+                                            if (!isPageRoute && !wasPageRoute) {
+                                              e.preventDefault();
+                                              closeDrawer();
+                                              const element = document.getElementById(nestedId);
+                                              if (element) {
+                                                element.scrollIntoView({ behavior: "smooth" });
+                                              }
+                                              window.location.hash = nestedItem.href;
+                                            } else {
+                                              closeDrawer();
+                                              window.location.hash = nestedItem.href;
+                                            }
+                                          }}
+                                          className="block px-4 py-1.5 text-[11px] text-slate-300 hover:text-white hover:bg-white/5 rounded transition-all font-semibold"
+                                        >
+                                          — {nestedItem.name}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <a
+                                  href={subItem.href}
+                                  onClick={(e) => {
+                                    const subId = subItem.href.replace("#", "");
+                                    const isPageRoute = isSubpageId(subId);
+                                    const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
+
+                                    if (!isPageRoute && !wasPageRoute) {
+                                      e.preventDefault();
+                                      closeDrawer();
+                                      const element = document.getElementById(subId);
+                                      if (element) {
+                                        element.scrollIntoView({ behavior: "smooth" });
+                                      }
+                                      window.location.hash = subItem.href;
+                                    } else {
+                                      closeDrawer();
+                                      window.location.hash = subItem.href;
+                                    }
+                                  }}
+                                  className="block px-4 py-2.5 text-xs text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all font-bold"
+                                >
+                                  • {subItem.name}
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Dynamic Action Buttons (e.g. Webmail) styled beautifully inside a premium button style */}
+              {header.buttons && header.buttons.map((btn) => (
+                <div key={btn.id} className="mt-5 px-3">
+                  <a
+                    href={btn.url}
+                    target={btn.isOpenNewTab ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    onClick={closeDrawer}
+                    className="w-full flex items-center justify-center gap-2.5 py-3.5 px-5 bg-gradient-to-r from-red-650 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm tracking-widest uppercase rounded-2xl shadow-lg border border-white/10 transition-all duration-300 transform active:scale-95 text-center"
+                  >
+                    <span>{btn.labelText}</span>
+                  </a>
+                </div>
+              ))}
+            </nav>
+          </div>
         </div>
       )}
     </header>

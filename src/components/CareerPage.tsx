@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Briefcase, MapPin, Clock, CheckCircle2, ChevronRight, Send, HelpCircle, HardHat, Sparkles } from "lucide-react";
+import { Briefcase, MapPin, Clock, ChevronRight, Send, Sparkles } from "lucide-react";
 import PageBanner from "./PageBanner";
+import ScrollReveal from "./ScrollReveal";
 
 export default function CareerPage() {
   const [formData, setFormData] = useState({
@@ -93,52 +94,67 @@ export default function CareerPage() {
 
         {/* Culture Intro */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
-          <div>
-            <span className="text-indigo-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full mb-4 inline-block">
-              Our Work Ethics
-            </span>
-            <h2 className="text-3xl font-extrabold text-[#1e1b4b] mb-6">
-              Learn, Innovate & Grow Together with Absolute Integrity
-            </h2>
-            <div className="prose prose-slate text-slate-600 text-sm leading-relaxed mb-6 space-y-4">
-              <p>
-                Inspired by the vision of our leadership, we believe that the true foundation of our mutual success rests upon the steady, proactive development of our human talent. When integers in our team learn, grow, and upgrade daily, <span className="font-semibold text-slate-800">Cloud Technologies</span> blooms alongside them.
-              </p>
-              <p>
-                We highly value **honesty, discipline, versatile engineering skills, and a rigorous commitment to corporate quality**. Whether configuring a local enterprise datacentre, installing sound platforms, or setting dynamic AI CCTV systems, our employees work as a unified force of modern innovators.
-              </p>
+          <ScrollReveal direction="right" duration={0.8}>
+            <div>
+              <span className="text-indigo-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full mb-4 inline-block">
+                Our Work Ethics
+              </span>
+              <h2 className="text-3xl font-extrabold text-[#1e1b4b] mb-6">
+                Learn, Innovate & Grow Together with Absolute Integrity
+              </h2>
+              <div className="prose prose-slate text-slate-600 text-sm leading-relaxed mb-6 space-y-4">
+                <p>
+                  Inspired by the vision of our leadership, we believe that the true foundation of our mutual success rests upon the steady, proactive development of our human talent. When integers in our team learn, grow, and upgrade daily, <span className="font-semibold text-slate-800">Cloud Technologies</span> blooms alongside them.
+                </p>
+                <p>
+                  We highly value **honesty, discipline, versatile engineering skills, and a rigorous commitment to corporate quality**. Whether configuring a local enterprise datacentre, installing sound platforms, or setting dynamic AI CCTV systems, our employees work as a unified force of modern innovators.
+                </p>
+              </div>
+              <div className="flex gap-4 items-center bg-indigo-50/60 p-4 rounded-2xl border border-indigo-100/30 font-sans">
+                <Sparkles className="w-6 h-6 text-indigo-600 flex-shrink-0" />
+                <p className="text-xs font-bold text-indigo-950 leading-normal">
+                  "Growth is a collective voyage. We reward team curiosity and invest heavily in continuous field-engineered validations."
+                </p>
+              </div>
             </div>
-            <div className="flex gap-4 items-center bg-indigo-50/60 p-4 rounded-2xl border border-indigo-100/30">
-              <Sparkles className="w-6 h-6 text-indigo-600 flex-shrink-0" />
-              <p className="text-xs font-bold text-indigo-955 leading-normal">
-                "Growth is a collective voyage. We reward team curiosity and invest heavily in continuous field-engineered validations."
-              </p>
+          </ScrollReveal>
+          
+          <ScrollReveal direction="left" duration={0.8} className="h-full">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg h-80 lg:h-96">
+              <img 
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop" 
+                alt="Team collaboration" 
+                className="w-full h-full object-cover" 
+                referrerPolicy="no-referrer"
+              />
             </div>
-          </div>
-          <div className="relative rounded-2xl overflow-hidden shadow-lg h-80 lg:h-96">
-            <img 
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop" 
-              alt="Team collaboration" 
-              className="w-full h-full object-cover" 
-              referrerPolicy="no-referrer"
-            />
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Benefits Grid */}
         <div className="mb-20">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1e1b4b] text-center mb-4">Why Work with Us?</h2>
-          <p className="text-slate-500 text-sm text-center mb-12 max-w-xl mx-auto">Explore the resources, growth environments, and professional incentives we supply across our national divisions.</p>
+          <ScrollReveal direction="up" duration={0.6}>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1e1b4b] text-center mb-4">Why Work with Us?</h2>
+            <p className="text-slate-500 text-sm text-center mb-12 max-w-xl mx-auto">Explore the resources, growth environments, and professional incentives we supply across our national divisions.</p>
+          </ScrollReveal>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, i) => (
-              <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:border-slate-200 transition-all">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-4 font-bold">
-                  {i + 1}
+              <ScrollReveal
+                key={i}
+                direction="up"
+                duration={0.6}
+                delay={i * 0.1}
+                className="flex h-full"
+              >
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:border-slate-200 transition-all w-full">
+                  <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-4 font-bold">
+                    {i + 1}
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-base mb-2">{benefit.title}</h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">{benefit.desc}</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-base mb-2">{benefit.title}</h4>
-                <p className="text-slate-600 text-xs leading-relaxed">{benefit.desc}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -147,66 +163,75 @@ export default function CareerPage() {
         <div className="grid lg:grid-cols-12 gap-12">
           {/* Active Job Openings List */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <h3 className="text-2xl font-bold text-[#1e1b4b] mb-2 flex items-center gap-2">
-              <Briefcase className="w-6 h-6 text-[#1e1b4b]" />
-              Active Openings
-            </h3>
-            <p className="text-slate-500 text-xs mb-4">We are actively sourcing talented professionals to join our offices and field engineering sections.</p>
+            <ScrollReveal direction="right" duration={0.6}>
+              <h3 className="text-2xl font-bold text-[#1e1b4b] mb-2 flex items-center gap-2">
+                <Briefcase className="w-6 h-6 text-[#1e1b4b]" />
+                Active Openings
+              </h3>
+              <p className="text-slate-500 text-xs mb-4">We are actively sourcing talented professionals to join our offices and field engineering sections.</p>
+            </ScrollReveal>
 
-            {jobs.map((job) => (
-              <div key={job.id} id={job.id} className="bg-slate-50/50 hover:bg-slate-50 p-6 rounded-2xl border border-slate-100 transition-all flex flex-col gap-4">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span className="text-[9px] uppercase font-bold tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-md">
-                      {job.department}
-                    </span>
-                    <span className="text-[9px] uppercase font-bold tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-md">
-                      {job.type}
-                    </span>
+            {jobs.map((job, idx) => (
+              <ScrollReveal
+                key={job.id}
+                direction="up"
+                duration={0.6}
+                delay={idx * 0.1}
+              >
+                <div id={job.id} className="bg-slate-50/50 hover:bg-slate-50 p-6 rounded-2xl border border-slate-100 transition-all flex flex-col gap-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className="text-[9px] uppercase font-bold tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-md">
+                        {job.department}
+                      </span>
+                      <span className="text-[9px] uppercase font-bold tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-md">
+                        {job.type}
+                      </span>
+                    </div>
+                    <h4 className="text-xl font-bold text-slate-900 mb-1">{job.title}</h4>
+                    
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 mb-3">
+                      <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-slate-400" />{job.location}</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-slate-400" />Exp: {job.experience}</span>
+                    </div>
+
+                    <p className="text-slate-600 text-xs leading-relaxed mb-4">
+                      {job.desc}
+                    </p>
                   </div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-1">{job.title}</h4>
-                  
-                  <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 mb-3">
-                    <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-slate-400" />{job.location}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-slate-400" />Exp: {job.experience}</span>
+
+                  <div className="border-t border-slate-200/50 pt-4">
+                    <h5 className="text-xs font-bold text-slate-800 mb-2">Requirements:</h5>
+                    <ul className="flex flex-col gap-1.5 text-xs text-slate-600 pl-4 list-disc">
+                      {job.requirements.map((req, rid) => (
+                        <li key={rid}>{req}</li>
+                      ))}
+                    </ul>
                   </div>
 
-                  <p className="text-slate-600 text-xs leading-relaxed mb-4">
-                    {job.desc}
-                  </p>
+                  <div className="flex justify-end pt-2">
+                    <button 
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, position: job.title }));
+                        const element = document.getElementById("apply-form");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className="flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800 hover:underline cursor-pointer"
+                    >
+                      Apply for this Job
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-
-                <div className="border-t border-slate-200/50 pt-4">
-                  <h5 className="text-xs font-bold text-slate-800 mb-2">Requirements:</h5>
-                  <ul className="flex flex-col gap-1.5 text-xs text-slate-600 pl-4 list-disc">
-                    {job.requirements.map((req, rid) => (
-                      <li key={rid}>{req}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex justify-end pt-2">
-                  <button 
-                    onClick={() => {
-                      setFormData(prev => ({ ...prev, position: job.title }));
-                      const element = document.getElementById("apply-form");
-                      if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    className="flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800 hover:underline"
-                  >
-                    Apply for this Job
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
 
           {/* Quick Apply Form Section */}
-          <div id="apply-form" className="lg:col-span-5">
-            <div className="bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm sticky top-28">
+          <ScrollReveal direction="left" duration={0.8} className="lg:col-span-5 h-full">
+            <div id="apply-form" className="bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm sticky top-28">
               <h3 className="text-xl font-bold text-[#1e1b4b] mb-2 flex items-center gap-2">
                 <Send className="w-5 h-5 text-indigo-600" />
                 Quick Apply
@@ -224,7 +249,7 @@ export default function CareerPage() {
                   </p>
                   <button 
                     onClick={() => setIsSubmitted(false)}
-                    className="mt-2 text-xs font-bold text-indigo-600 hover:underline"
+                    className="mt-2 text-xs font-bold text-indigo-600 hover:underline cursor-pointer"
                   >
                     Apply another position
                   </button>
@@ -239,7 +264,7 @@ export default function CareerPage() {
                       required
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder="e.g. Shakil Ahmed" 
+                      placeholder="Enter your full name" 
                       className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:outline-none transition-all"
                     />
                   </div>
@@ -253,7 +278,7 @@ export default function CareerPage() {
                         required
                         value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="e.g. mail@example.com" 
+                        placeholder="Enter your email address" 
                         className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:outline-none transition-all"
                       />
                     </div>
@@ -265,7 +290,7 @@ export default function CareerPage() {
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="e.g. +88017XXXXXXXX" 
+                        placeholder="Enter your mobile phone number" 
                         className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:outline-none transition-all"
                       />
                     </div>
@@ -308,7 +333,7 @@ export default function CareerPage() {
                       name="resumeUrl"
                       value={formData.resumeUrl}
                       onChange={handleInputChange}
-                      placeholder="e.g. https://drive.google.com/.../my-cv.pdf" 
+                      placeholder="Enter your resume link" 
                       className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:outline-none transition-all"
                     />
                   </div>
@@ -320,22 +345,22 @@ export default function CareerPage() {
                       rows={3}
                       value={formData.coverLetter}
                       onChange={handleInputChange}
-                      placeholder="Explain shortly why you want to grow with us..." 
+                      placeholder="Enter your cover letter details" 
                       className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:outline-none transition-all resize-none"
                     />
                   </div>
 
                   <button 
                     type="submit"
-                    className="w-full bg-[#1e1b4b] hover:bg-indigo-900 text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2"
+                    className="w-full bg-[#1e1b4b] hover:bg-slate-900 text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer h-12"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-4 h-4 ml-1" />
                     Submit Application
                   </button>
                 </form>
               )}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

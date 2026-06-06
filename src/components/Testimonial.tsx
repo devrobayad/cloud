@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { dataStore, TestimonialItem } from "../utils/dataStore";
+import ScrollReveal from "./ScrollReveal";
 
 export default function Testimonial() {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(() => dataStore.getTestimonials());
@@ -28,7 +29,7 @@ export default function Testimonial() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Column: Title and text */}
-          <div className="flex flex-col gap-6">
+          <ScrollReveal direction="right" duration={0.8} className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               <span className="text-orange-500 font-extrabold uppercase tracking-widest text-[11px] font-sans">
@@ -59,10 +60,10 @@ export default function Testimonial() {
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Custom Visual Testimonial Card */}
-          <div className="relative bg-gradient-to-tr from-indigo-950 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl overflow-hidden min-h-[320px] flex flex-col justify-between">
+          <ScrollReveal direction="left" duration={0.8} className="relative bg-gradient-to-tr from-indigo-950 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl overflow-hidden min-h-[320px] flex flex-col justify-between">
             {/* Background Decorative Quote */}
             <div className="absolute top-4 right-8 text-white/5 pointer-events-none">
               <Quote className="w-36 h-36" />
@@ -97,7 +98,7 @@ export default function Testimonial() {
                 </span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
         </div>
       </div>
