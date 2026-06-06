@@ -14,6 +14,8 @@ interface VideoItem {
   embedCode: string; // fallback if embed not working or fake video stream simulation
   description: string;
   views: string;
+  videoType?: "youtube" | "uploaded";
+  videoUrl?: string;
 }
 
 const videoItems: VideoItem[] = [
@@ -149,18 +151,18 @@ export default function VideoGallery() {
         </div>
 
         {/* Featured Video Block if available (Using first item) */}
-        {videoItems.length > 0 && selectedCategory === "all" && (
+        {videosState.length > 0 && selectedCategory === "all" && (
           <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl mb-12 border border-slate-800 grid grid-cols-1 lg:grid-cols-12">
             <div className="relative lg:col-span-7 h-64 sm:h-96 lg:h-auto overflow-hidden bg-slate-950 group">
               <img
-                src={videoItems[0].thumbnail}
-                alt={videoItems[0].title}
+                src={videosState[0].thumbnail}
+                alt={videosState[0].title}
                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 group-hover:opacity-50 transition-all duration-500"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <button
-                  onClick={() => openPlayer(videoItems[0])}
+                  onClick={() => openPlayer(videosState[0])}
                   className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-2xl hover:bg-indigo-500 hover:scale-110 active:scale-95 transition-all text-lg cursor-pointer animate-bounce-subtle"
                 >
                   <Play className="w-6 h-6 fill-white ml-1" />
@@ -168,30 +170,30 @@ export default function VideoGallery() {
               </div>
               <span className="absolute bottom-4 right-4 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 text-xs font-bold rounded-lg text-slate-300 flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-indigo-400" />
-                {videoItems[0].duration}
+                {videosState[0].duration}
               </span>
             </div>
             
             <div className="p-8 sm:p-12 lg:col-span-5 flex flex-col justify-between">
               <div className="flex flex-col gap-4">
                 <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-[10px] font-extrabold uppercase tracking-widest max-w-max">
-                  {videoItems[0].categoryLabel}
+                  {videosState[0].categoryLabel}
                 </span>
                 <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-tight">
-                  {videoItems[0].title}
+                  {videosState[0].title}
                 </h2>
                 <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  {videoItems[0].description}
+                  {videosState[0].description}
                 </p>
               </div>
 
               <div className="flex items-center gap-6 pt-6 border-t border-slate-800 mt-6 text-xs text-slate-500 font-semibold uppercase tracking-wider">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-slate-600" />
-                  <span>{videoItems[0].date}</span>
+                  <span>{videosState[0].date}</span>
                 </div>
                 <div>
-                  <span>{videoItems[0].views}</span>
+                  <span>{videosState[0].views}</span>
                 </div>
               </div>
             </div>
@@ -291,35 +293,60 @@ export default function VideoGallery() {
               </div>
 
               {/* Center Stage Player container */}
-              <div className="relative bg-black aspect-video flex-grow flex items-center justify-center">
-                {/* Simulated Beautiful High Tech Stream Preview with interactive video layout */}
-                <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30">
-                  <div className="flex items-center gap-2 select-none">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-                    <span className="text-[10px] tracking-widest bg-red-600/20 text-red-500 px-2 py-0.5 rounded font-extrabold uppercase">ULTRA HD STREAM</span>
-                  </div>
+              <div className="relative bg-black aspect-video flex-grow flex items-center justify-center overflow-hidden">
+                {activeVideo.videoType === "uploaded" && activeVideo.videoUrl ? (
+                  <video
+                    src={activeVideo.videoUrl}
+                    controls
+                    autoPlay
+                    className="w-full h-full object-contain relative z-10 pointer-events-auto"
+                  />
+                ) : (activeVideo.videoType === "youtube" || activeVideo.videoUrl || activeVideo.embedCode) ? (
+                  <iframe
+                    className="w-full h-full absolute inset-0 z-10 pointer-events-auto"
+                    src={`https://www.youtube.com/embed/${(() => {
+                      const url = activeVideo.videoUrl || activeVideo.embedCode;
+                      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                      const match = url.match(regExp);
+                      return (match && match[2].length === 11) ? match[2] : url;
+                    })()}?autoplay=1&rel=0`}
+                    title={activeVideo.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                  <>
+                    {/* Simulated Beautiful High Tech Stream Preview with interactive video layout */}
+                    <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30 z-10 pointer-events-none select-none">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-505 animate-pulse" />
+                        <span className="text-[10px] tracking-widest bg-red-600/20 text-red-500 px-2 py-0.5 rounded font-extrabold uppercase">ULTRA HD STREAM</span>
+                      </div>
 
-                  <div className="flex flex-col items-center gap-3 my-auto text-center px-4">
-                    <div className="w-16 h-16 rounded-full bg-indigo-600/30 text-indigo-400 flex items-center justify-center border border-indigo-500/30 shadow-lg border-dashed">
-                      <Play className="w-6 h-6 fill-indigo-400 ml-1 animate-pulse" />
+                      <div className="flex flex-col items-center gap-3 my-auto text-center px-4">
+                        <div className="w-16 h-16 rounded-full bg-indigo-600/30 text-indigo-400 flex items-center justify-center border border-indigo-500/30 shadow-lg border-dashed">
+                          <Play className="w-6 h-6 fill-indigo-400 ml-1 animate-pulse" />
+                        </div>
+                        <span className="text-white text-xs font-bold font-mono tracking-tight bg-slate-950/70 py-1.5 px-3 rounded-full border border-white/5 select-none">
+                          STREAM SOURCE CONNECTING... (00:00 / {activeVideo.duration})
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-slate-400 text-[10px] font-mono">
+                        <span>PORT: 3000 // DEPLOY_STREAM // ACTIVE_NODE</span>
+                        <span>HD 1080P // 60 FPS</span>
+                      </div>
                     </div>
-                    <span className="text-white text-xs font-bold font-mono tracking-tight bg-slate-950/70 py-1.5 px-3 rounded-full border border-white/5 select-none">
-                      STREAM SOURCE CONNECTING... (00:00 / {activeVideo.duration})
-                    </span>
-                  </div>
 
-                  <div className="flex items-center justify-between text-slate-400 text-[10px] font-mono">
-                    <span>PORT: 3000 // DEPLOY_STREAM // ACTIVE_NODE</span>
-                    <span>HD 1080P // 60 FPS</span>
-                  </div>
-                </div>
-
-                <img 
-                  src={activeVideo.thumbnail} 
-                  alt="" 
-                  className="w-full h-full object-cover opacity-30 select-none pointer-events-none"
-                  referrerPolicy="no-referrer"
-                />
+                    <img 
+                      src={activeVideo.thumbnail} 
+                      alt="" 
+                      className="w-full h-full object-cover opacity-30 select-none pointer-events-none"
+                      referrerPolicy="no-referrer"
+                    />
+                  </>
+                )}
               </div>
 
               {/* Bottom Row Details */}

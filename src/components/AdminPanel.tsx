@@ -208,18 +208,75 @@ export default function AdminPanel() {
   const [currentImage, setCurrentImage] = useState<string>("");
   const [currentImagesList, setCurrentImagesList] = useState<string[]>([]);
   const [currentThumbnail, setCurrentThumbnail] = useState<string>("");
+  const [currentVideoType, setCurrentVideoType] = useState<"youtube" | "uploaded">("youtube");
+  const [currentVideoUrl, setCurrentVideoUrl] = useState<string>("");
 
   useEffect(() => {
     if (editingItem) {
       setCurrentImage(editingItem.image || "");
       setCurrentImagesList(editingItem.images || []);
       setCurrentThumbnail(editingItem.thumbnail || "");
+      
+      const vType = editingItem.videoType || (editingItem.embedCode ? "youtube" : "youtube");
+      setCurrentVideoType(vType);
+      
+      let vUrl = editingItem.videoUrl || "";
+      if (!vUrl && editingItem.embedCode) {
+        vUrl = `https://www.youtube.com/watch?v=${editingItem.embedCode}`;
+      }
+      setCurrentVideoUrl(vUrl);
     } else {
       setCurrentImage("");
       setCurrentImagesList([]);
       setCurrentThumbnail("");
+      setCurrentVideoType("youtube");
+      setCurrentVideoUrl("");
     }
   }, [editingItem]);
+
+  // cPanel Server Write Sync Status Tracking States
+  const [writeState, setWriteState] = useState<{
+    isLoading: boolean;
+    status: "idle" | "saving" | "success" | "error";
+    message: string;
+  }>({
+    isLoading: false,
+    status: "idle",
+    message: ""
+  });
+
+  useEffect(() => {
+    const handleWriteStatus = (e: Event) => {
+      const customEvent = e as CustomEvent<{ type: "start" | "success" | "error"; message?: string }>;
+      const { type, message } = customEvent.detail;
+      if (type === "start") {
+        setWriteState({
+          isLoading: true,
+          status: "saving",
+          message: "Synchronizing your changes to the cPanel web host..."
+        });
+      } else if (type === "success") {
+        setWriteState({
+          isLoading: false,
+          status: "success",
+          message: message || "Changes saved permanently to cPanel site_data.json successfully!"
+        });
+        // Clear success message after 5 seconds to keep screen neat
+        setTimeout(() => {
+          setWriteState(prev => prev.status === "success" ? { isLoading: false, status: "idle", message: "" } : prev);
+        }, 5000);
+      } else if (type === "error") {
+        setWriteState({
+          isLoading: false,
+          status: "error",
+          message: message || "Failed to write changes to cPanel server."
+        });
+      }
+    };
+
+    window.addEventListener("datastore-write-status", handleWriteStatus);
+    return () => window.removeEventListener("datastore-write-status", handleWriteStatus);
+  }, []);
 
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -282,6 +339,23 @@ export default function AdminPanel() {
         }
       };
       img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Selected video exceeds the 10MB size limit. Please upload files under 10MB for optimal browser and database storage efficiency.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setCurrentVideoUrl(dataUrl);
     };
     reader.readAsDataURL(file);
   };
@@ -1457,12 +1531,32 @@ export default function AdminPanel() {
       const categoryLabel = fd.get("categoryLabel") as string;
       const duration = fd.get("duration") as string;
       const date = fd.get("date") as string;
-      const thumbnail = fd.get("thumbnail") as string;
-      const embedCode = fd.get("embedCode") as string;
+      const thumbnail = currentThumbnail || fd.get("thumbnail") as string;
       const description = fd.get("description") as string;
 
-      if (!title || !category || !categoryLabel || !duration || !date || !thumbnail || !embedCode) {
-        setFormError("All fields are required.");
+      const videoUrl = currentVideoUrl;
+      const videoType = currentVideoType;
+
+      // Parse YouTube ID out of various possible links or input
+      let embedCode = fd.get("embedCode") as string || "dQw4w9WgXcQ";
+      if (videoType === "youtube" && videoUrl) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = videoUrl.match(regExp);
+        embedCode = (match && match[2].length === 11) ? match[2] : videoUrl;
+      }
+
+      if (!title || !category || !categoryLabel || !duration || !date || !thumbnail) {
+        setFormError("All fields except description and file are required.");
+        return;
+      }
+
+      if (videoType === "uploaded" && !videoUrl) {
+        setFormError("Please upload a local video file (up to 10MB) to utilize local video streaming.");
+        return;
+      }
+
+      if (videoType === "youtube" && !videoUrl) {
+        setFormError("Please specify a YouTube video URL, short link, or 11-char Video ID.");
         return;
       }
 
@@ -1476,7 +1570,9 @@ export default function AdminPanel() {
         thumbnail,
         embedCode,
         description: description || "",
-        views: editingItem?.views || "0 views"
+        views: editingItem?.views || "0 views",
+        videoType,
+        videoUrl
       };
 
       if (isAddingNew) {
@@ -7661,10 +7757,102 @@ if (send_mail_routing(\$config, \$subject, \$htmlMessage, \$fullName, \$corporat
                       <label className="block text-slate-500 text-[10.5px] uppercase font-bold tracking-wider mb-1.5 font-sans">Post Date *</label>
                       <input type="text" name="date" defaultValue={editingItem.date || "June 04, 2026"} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800" required />
                     </div>
+                    
+                    {/* Source Toggle Selector block */}
                     <div>
-                      <label className="block text-slate-500 text-[10.5px] uppercase font-bold tracking-wider mb-1.5">YouTube ID or Video Hash Code *</label>
-                      <input type="text" name="embedCode" defaultValue={editingItem.embedCode || "dQw4w9WgXcQ"} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-850 font-mono" placeholder="YouTube Video ID e.g. f3yI5b1X9r8" required />
+                      <label className="block text-slate-500 text-[10.5px] uppercase font-bold tracking-wider mb-1.5">Video Source Type *</label>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCurrentVideoType("youtube");
+                          }}
+                          className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
+                            currentVideoType === "youtube"
+                              ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                              : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                          }`}
+                        >
+                          <Video className="w-3.5 h-3.5" />
+                          <span>YouTube URL / ID</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCurrentVideoType("uploaded");
+                          }}
+                          className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
+                            currentVideoType === "uploaded"
+                              ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                              : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                          }`}
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Local Clip (Max 10MB)</span>
+                        </button>
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Elegant Conditionally Rendered video picker */}
+                  <div className="bg-slate-50/50 border border-slate-200 p-4 rounded-2xl space-y-3">
+                    {currentVideoType === "youtube" ? (
+                      <div className="space-y-1.5">
+                        <label className="block text-slate-700 text-xs font-extrabold uppercase tracking-wider mb-0.5">YouTube Link / ID *</label>
+                        <input 
+                          type="text" 
+                          value={currentVideoUrl}
+                          onChange={(e) => setCurrentVideoUrl(e.target.value)}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-800 font-mono focus:ring-2 focus:ring-indigo-500" 
+                          placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
+                          required={currentVideoType === "youtube"} 
+                        />
+                        <p className="text-[10px] text-slate-400 font-sans italic leading-relaxed">
+                          Provide the full YouTube video URL, sharing link, or the direct 11-character video ID code.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <label className="block text-slate-700 text-xs font-extrabold uppercase tracking-wider mb-0.5">Upload Local Video File *</label>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                          {/* Drag & Drop File Input */}
+                          <div className="border-2 border-dashed border-slate-200 hover:border-indigo-400 rounded-2xl p-4 transition-all bg-white flex flex-col items-center justify-center text-center relative group min-h-[140px]">
+                            <input 
+                              type="file" 
+                              accept="video/*" 
+                              onChange={handleVideoUpload} 
+                              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
+                            />
+                            <Upload className="w-6 h-6 text-slate-400 group-hover:text-indigo-500 transition-colors mb-2" />
+                            <span className="text-xs text-slate-600 font-bold">Drag & Drop or Click</span>
+                            <span className="text-[10px] text-slate-400 mt-1">Select video file (.mp4, .webm)</span>
+                            <span className="text-[9px] text-indigo-500 font-bold mt-1">Max Upload Limit: 10MB</span>
+                          </div>
+
+                          {/* Previews List */}
+                          <div className="border border-slate-200 rounded-2xl p-3 bg-white min-h-[140px] flex items-center justify-center relative overflow-hidden">
+                            {currentVideoUrl ? (
+                              <div className="w-full h-full relative flex items-center justify-center bg-black rounded-xl overflow-hidden">
+                                <video src={currentVideoUrl} controls className="w-full h-full object-contain" />
+                                <button
+                                  type="button"
+                                  onClick={() => setCurrentVideoUrl("")}
+                                  className="absolute top-2 right-2 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full p-1.5 transition-colors z-20 cursor-pointer"
+                                  title="Remove video file"
+                                >
+                                  <X className="w-3" />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="text-slate-400 text-xs font-sans text-center">
+                                No video clip loaded yet
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Elegant Video Thumbnail Image Upload Section */}
@@ -7784,6 +7972,72 @@ if (send_mail_routing(\$config, \$subject, \$htmlMessage, \$fullName, \$corporat
               >
                 Yes, Proceed
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ====== CPANEL WRITE SYNC STATE TRACKER TOAST/OVERLAY ====== */}
+      {writeState.status !== "idle" && (
+        <div id="cpanel-sync-toast" className={`fixed bottom-6 right-6 max-w-sm md:max-w-md w-full bg-slate-900 text-white rounded-2xl shadow-2xl p-5 border ${writeState.status === "error" ? "border-red-500/50" : writeState.status === "success" ? "border-emerald-500/50" : "border-indigo-500/30"} z-[99999] transition-all duration-300 transform translate-y-0`}>
+          <div className="flex gap-4">
+            <div className="flex-shrink-0 mt-0.5">
+              {writeState.status === "saving" && (
+                <div className="relative">
+                  <Loader2 className="w-6 h-6 text-indigo-400 animate-spin" />
+                  <span className="absolute inset-0 rounded-full bg-indigo-400/20 animate-ping" />
+                </div>
+              )}
+              {writeState.status === "success" && (
+                <div className="bg-emerald-500/20 text-emerald-400 p-1.5 rounded-full">
+                  <CheckCircle className="w-5 h-5" />
+                </div>
+              )}
+              {writeState.status === "error" && (
+                <div className="bg-rose-500/20 text-rose-400 p-1.5 rounded-full animate-bounce">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+              )}
+            </div>
+            
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
+                  {writeState.status === "saving" ? "cPanel Sync Active" : writeState.status === "success" ? "Sync Success" : "Sync Error / Cache Mode"}
+                </span>
+                
+                {writeState.status === "error" && (
+                  <button 
+                    onClick={() => setWriteState({ isLoading: false, status: "idle", message: "" })}
+                    className="text-slate-400 hover:text-white transition-colors duration-150 p-1 hover:bg-slate-800 rounded-lg cursor-pointer"
+                    title="Dismiss alert"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              
+              <h5 className="font-extrabold text-xs tracking-wide">
+                {writeState.status === "saving" ? "Writing changes to host server..." : writeState.status === "success" ? "All database changes written!" : "Write Permission Denied (CHMOD Required)"}
+              </h5>
+              
+              <p className="text-[11px] text-slate-300 leading-relaxed font-sans font-medium">
+                {writeState.message}
+              </p>
+
+              {writeState.status === "error" && (
+                <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[10.5px] text-slate-300 space-y-1.5 font-sans leading-normal">
+                  <span className="font-extrabold text-rose-400 uppercase tracking-wide block">How to resolve on cPanel:</span>
+                  <div className="space-y-1 font-medium">
+                    <p>1. Log in to your <strong className="text-white">cPanel File Manager</strong>.</p>
+                    <p>2. Locate your <strong className="text-white">public_html</strong> directory (or subfolder).</p>
+                    <p>3. Right-click the <strong className="text-white">api</strong> folder and select <strong className="text-white font-mono font-bold">Change Permissions (CHMOD)</strong>.</p>
+                    <p>4. Set its permission code to <strong className="text-emerald-400 font-mono font-bold">755</strong> (or <strong className="text-amber-400 font-mono font-bold">775 / 777</strong> if it is owned by a different web server user).</p>
+                    <p>5. Inside the <strong className="text-white">api</strong> folder, right-click <strong className="text-white">site_data.json</strong> and set its permissions to <strong className="text-emerald-400 font-mono font-bold">644</strong> or <strong className="text-emerald-400 font-mono font-bold">664</strong>.</p>
+                    <p className="text-slate-400 text-[10px] pt-1 leading-normal italic">Disclaimer: Since we also save to in-browser storage, edits display correctly inside your current browser session, but changing permissions makes them immediately public for everyone.</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

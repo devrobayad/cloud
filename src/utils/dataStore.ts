@@ -54,6 +54,8 @@ export interface VideoItem {
   embedCode: string;
   description: string;
   views: string;
+  videoType?: "youtube" | "uploaded";
+  videoUrl?: string;
 }
 
 export interface InquiryItem {
@@ -866,7 +868,9 @@ const defaultVideos: VideoItem[] = [
     thumbnail: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=800&auto=format&fit=crop",
     embedCode: "f3yI5b1X9r8",
     description: "An in-depth look at our engineering workshops, structural cabling deployment sites, elite supply chain partnerships, and customer support standards.",
-    views: "1.2K views"
+    views: "1.2K views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=f3yI5b1X9r8"
   },
   {
     id: 2,
@@ -878,7 +882,9 @@ const defaultVideos: VideoItem[] = [
     thumbnail: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=800&auto=format&fit=crop",
     embedCode: "dQw4w9WgXcQ",
     description: "Step-by-step documentation of an active 128-node security mesh deployment, NVR synchronization, and custom wall-mount array integration.",
-    views: "850 views"
+    views: "850 views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   },
   {
     id: 3,
@@ -890,7 +896,51 @@ const defaultVideos: VideoItem[] = [
     thumbnail: "https://images.unsplash.com/photo-1601597111158-2fceff270190?q=80&w=800&auto=format&fit=crop",
     embedCode: "d7Z9r3hK9s3",
     description: "Our core optic technicians show off absolute cleanliness in active outdoor splice closures and core joint laser calibration procedures.",
-    views: "2.4K views"
+    views: "2.4K views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=d7Z9r3hK9s3"
+  },
+  {
+    id: 4,
+    title: "How to Configure SIP-Based IP Door Intercom Solutions",
+    category: "tutorial",
+    categoryLabel: "Technical Tutorial",
+    duration: "12:40",
+    date: "January 20, 2024",
+    thumbnail: "https://images.unsplash.com/photo-1517502884422-41eaaced0168?q=80&w=800&auto=format&fit=crop",
+    embedCode: "aA8r9vKd3e9",
+    description: "A complete software routing config tutorial mapping outdoor keypad access monitors to indoor PBX SIP extensions.",
+    views: "930 views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=aA8r9vKd3e9"
+  },
+  {
+    id: 5,
+    title: "Calibrating Multi-Zone Professional PA & Audio Systems",
+    category: "tutorial",
+    categoryLabel: "Technical Tutorial",
+    duration: "10:15",
+    date: "December 05, 2023",
+    thumbnail: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop",
+    description: "Demonstrating dynamic frequency response EQ setups, zone selector matrices, and paging console overrides under high volume loads.",
+    embedCode: "tG3hK8r6P2w",
+    views: "1.5K views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=tG3hK8r6P2w"
+  },
+  {
+    id: 6,
+    title: "Advanced Biometric Access Control Server Deployment",
+    category: "installation",
+    categoryLabel: "Installation Case Study",
+    duration: "5:30",
+    date: "October 22, 2023",
+    thumbnail: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop",
+    description: "Configuring real-time active directory synchronization and instant alert logging parameters on server-side dashboard controllers.",
+    embedCode: "s2f8K9w8A3x",
+    views: "710 views",
+    videoType: "youtube",
+    videoUrl: "https://www.youtube.com/watch?v=s2f8K9w8A3x"
   }
 ];
 
@@ -956,7 +1006,7 @@ function getStored<T>(key: string, defaultValue: T): T {
 }
 
 // Function to automatically sync all settings to cPanel storage via API Node
-function saveToCPanel(): void {
+function saveToCPanel(): Promise<{ success: boolean; message: string }> {
   const data: Record<string, any> = {
     ctl_news: getStored("ctl_news", defaultNews),
     ctl_running_projects: getStored("ctl_running_projects", defaultRunningProjects),
@@ -988,27 +1038,53 @@ function saveToCPanel(): void {
     ctl_mysql_config: getStored("ctl_mysql_config", defaultMySQLConfig)
   };
 
-  fetch("api/save-data.php", {
+  if (isClient) {
+    window.dispatchEvent(new CustomEvent("datastore-write-status", { detail: { type: "start" } }));
+  }
+
+  return fetch("api/save-data.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(data)
   })
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
+    return res.json();
+  })
   .then(resData => {
     if (resData && resData.status === "error") {
       console.error("Server API returned error status:", resData.message);
+      if (isClient) {
+        window.dispatchEvent(new CustomEvent("datastore-write-status", { detail: { type: "error", message: resData.message } }));
+      }
+      return { success: false, message: resData.message };
     } else {
       console.log("Successfully saved permanently to cPanel site_data.json:", resData);
+      const msg = resData.message || "Saved successfully to server.";
+      if (isClient) {
+        window.dispatchEvent(new CustomEvent("datastore-write-status", { detail: { type: "success", message: msg } }));
+      }
+      return { success: true, message: msg };
     }
   })
   .catch(err => {
     console.warn("cPanel PHP api/save-data.php endpoint not serving locally. Saved in-browser instead.", err.message);
+    const failMsg = "Browser is Offline or Server Permission Error. Changes saved temporarily in this browser, but not written to cPanel site_data.json. Error detail: " + err.message;
+    if (isClient) {
+      window.dispatchEvent(new CustomEvent("datastore-write-status", { detail: { type: "error", message: failMsg } }));
+    }
+    return {
+      success: false,
+      message: failMsg
+    };
   });
 }
 
-function setStored<T>(key: string, value: T): void {
+function setStored<T>(key: string, value: T): Promise<{ success: boolean; message: string }> {
   // Always update our live application store
   liveAppStore[key] = value;
 
@@ -1019,13 +1095,13 @@ function setStored<T>(key: string, value: T): void {
     console.warn("Could not save key to LocalStorage:", key, e);
   }
   
-  // Trigger modern cPanel dynamic write API
-  saveToCPanel();
-  
   // Dispatch event to force other live sub-components and panels to update their view state
   if (isClient) {
     window.dispatchEvent(new Event("datastore-update"));
   }
+
+  // Trigger modern cPanel dynamic write API and return promise
+  return saveToCPanel();
 }
 
 export const dataStore = {
@@ -1141,8 +1217,9 @@ export const dataStore = {
     };
   },
   saveEmailIntegrationConfig: (config: EmailIntegrationConfig) => {
-    setStored("ctl_email_integration_config", config);
+    const p = setStored("ctl_email_integration_config", config);
     window.dispatchEvent(new Event("datastore-update"));
+    return p;
   },
 
   getMySQLConfig: (): MySQLConfig => {
@@ -1153,8 +1230,9 @@ export const dataStore = {
     };
   },
   saveMySQLConfig: (config: MySQLConfig) => {
-    setStored("ctl_mysql_config", config);
+    const p = setStored("ctl_mysql_config", config);
     window.dispatchEvent(new Event("datastore-update"));
+    return p;
   },
 
   getSiteMetadata: (): SiteMetadata => {

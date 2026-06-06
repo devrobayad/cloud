@@ -21,13 +21,24 @@ $dataFileB = __DIR__ . '/site_data.json';
 
 // Ensure directory is writable when attempting to save
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $contentLength = isset($_SERVER['CONTENT_LENGTH']) ? (int)$_SERVER['CONTENT_LENGTH'] : 0;
     $rawInput = file_get_contents("php://input");
     $input = json_decode($rawInput, true);
 
     if (!$input) {
+        $errorMessage = "Invalid JSON payload provided to save-data.php API.";
+        
+        // Check if payload size exceeded PHP post_max_size or upload limits
+        if ($contentLength > 0 && empty($rawInput)) {
+            $postMaxSize = ini_get('post_max_size');
+            $errorMessage = "Your request payload size is too large (" . round($contentLength / 1024 / 1024, 2) . " MB). This exceeds your cPanel server's PHP 'post_max_size' limit of " . $postMaxSize . ". Please reduce the number or file size of your uploaded gallery photos, or log in to your cPanel, navigate to 'MultiPHP INI Editor' or 'PHP Selector', and increase both 'post_max_size' and 'upload_max_filesize' to at least 32M or 64M.";
+        } else if ($rawInput !== "" && json_last_error() !== JSON_ERROR_NONE) {
+            $errorMessage = "JSON parsing error on cPanel server: " . json_last_error_msg() . ". Content: " . substr($rawInput, 0, 100) . "...";
+        }
+
         echo json_encode([
             "status" => "error",
-            "message" => "Invalid JSON payload provided to save-data.php API."
+            "message" => $errorMessage
         ]);
         exit();
     }
