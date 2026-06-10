@@ -411,137 +411,137 @@ const defaultContactConfig: ContactInfo = {
 };
 
 const defaultHeaderMenuItems: NavItemConfig[] = [
-  { id: "1", name: "Home", href: "#home" },
+  { id: "1", name: "Home", href: "/home" },
   { 
     id: "2",
     name: "About Us", 
-    href: "#about", 
+    href: "/about", 
     hasDropdown: true,
     dropdownItems: [
-      { id: "2-1", name: "About", href: "#about" },
-      { id: "2-2", name: "Chairman Message", href: "#chairman" },
-      { id: "2-3", name: "MD's Message", href: "#md" },
-      { id: "2-4", name: "Our Vision & Mission", href: "#vision" },
-      { id: "2-5", name: "Management Info", href: "#management" },
-      { id: "2-6", name: "Why Choose Us", href: "#why-choose-us" },
-      { id: "2-7", name: "CSR Initiatives", href: "#csr" },
-      { id: "2-8", name: "Career Opportunities", href: "#career" }
+      { id: "2-1", name: "About", href: "/about" },
+      { id: "2-2", name: "Chairman Message", href: "/chairman" },
+      { id: "2-3", name: "MD's Message", href: "/md" },
+      { id: "2-4", name: "Our Vision & Mission", href: "/vision" },
+      { id: "2-5", name: "Management Info", href: "/management" },
+      { id: "2-6", name: "Why Choose Us", href: "/why-choose-us" },
+      { id: "2-7", name: "CSR Initiatives", href: "/csr" },
+      { id: "2-8", name: "Career Opportunities", href: "/career" }
     ]
   },
   { 
     id: "3",
     name: "Projects", 
-    href: "#projects", 
+    href: "/projects", 
     hasDropdown: true,
     dropdownItems: [
-      { id: "3-1", name: "Running Projects", href: "#running-projects" },
-      { id: "3-2", name: "Completed Projects", href: "#completed-projects" }
+      { id: "3-1", name: "Running Projects", href: "/running-projects" },
+      { id: "3-2", name: "Completed Projects", href: "/completed-projects" }
     ]
   },
   { 
     id: "4",
     name: "Our Services & Solutions", 
-    href: "#solutions", 
+    href: "/solutions", 
     hasDropdown: true,
     dropdownItems: [
       { 
         id: "4-1",
         name: "Conference Room Solution", 
-        href: "#conference",
+        href: "/conference",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-1-1", name: "Conference Solution", href: "#conf-solution" },
-          { id: "4-1-2", name: "Meeting Room Solutions", href: "#conf-meeting-room" }
+          { id: "4-1-1", name: "Conference Solution", href: "/conf-solution" },
+          { id: "4-1-2", name: "Meeting Room Solutions", href: "/conf-meeting-room" }
         ]
       },
       { 
         id: "4-2",
         name: "Sound System Solution", 
-        href: "#sound",
+        href: "/sound",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-2-1", name: "Professional Sound system", href: "#sound-professional" },
-          { id: "4-2-2", name: "IP PA System", href: "#sound-ip-pa" },
-          { id: "4-2-3", name: "PA System", href: "#sound-pa" }
+          { id: "4-2-1", name: "Professional Sound system", href: "/sound-professional" },
+          { id: "4-2-2", name: "IP PA System", href: "/sound-ip-pa" },
+          { id: "4-2-3", name: "PA System", href: "/sound-pa" }
         ]
       },
       { 
         id: "4-3",
         name: "Enterprise CCTV Surveillance Solution", 
-        href: "#cctv",
+        href: "/cctv",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-3-1", name: "IP/Analog CCTV Solution", href: "#cctv-ip-analog" },
-          { id: "4-3-2", name: "Automatic Number Plate Recognition (ANPR) Solution", href: "#cctv-anpr" },
-          { id: "4-3-3", name: "AI Surveillance Solution", href: "#cctv-ai" },
-          { id: "4-3-4", name: "VMS Based Analytical Surveillance Solution", href: "#cctv-vms" },
-          { id: "4-3-5", name: "Data Storage Solution", href: "#cctv-storage" },
-          { id: "4-3-6", name: "Centralized Video Surveillance Solutions", href: "#cctv-centralized" }
+          { id: "4-3-1", name: "IP/Analog CCTV Solution", href: "/cctv-ip-analog" },
+          { id: "4-3-2", name: "Automatic Number Plate Recognition (ANPR) Solution", href: "/cctv-anpr" },
+          { id: "4-3-3", name: "AI Surveillance Solution", href: "/cctv-ai" },
+          { id: "4-3-4", name: "VMS Based Analytical Surveillance Solution", href: "/cctv-vms" },
+          { id: "4-3-5", name: "Data Storage Solution", href: "/cctv-storage" },
+          { id: "4-3-6", name: "Centralized Video Surveillance Solutions", href: "/cctv-centralized" }
         ]
       },
       { 
         id: "4-4",
         name: "Value Added Service", 
-        href: "#vas",
+        href: "/vas",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-4-1", name: "Manage Services", href: "#vas-managed" },
-          { id: "4-4-2", name: "On call Services", href: "#vas-oncall" },
-          { id: "4-4-3", name: "One Stop support services", href: "#vas-onestop" },
-          { id: "4-4-4", name: "Service upon payment", href: "#vas-payment" }
+          { id: "4-4-1", name: "Manage Services", href: "/vas-managed" },
+          { id: "4-4-2", name: "On call Services", href: "/vas-oncall" },
+          { id: "4-4-3", name: "One Stop support services", href: "/vas-onestop" },
+          { id: "4-4-4", name: "Service upon payment", href: "/vas-payment" }
         ]
       },
       { 
         id: "4-5",
         name: "Access Control Solution", 
-        href: "#access",
+        href: "/access",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-5-1", name: "Facial Recognition Solution", href: "#access-facial" },
-          { id: "4-5-2", name: "Bio-Metric Time Attendance Solution", href: "#access-biometric" },
-          { id: "4-5-3", name: "Visitor Management", href: "#access-visitor" },
-          { id: "4-5-4", name: "Gate Barrier Solution", href: "#access-barrier" },
-          { id: "4-5-5", name: "Hotel Series Door Lock", href: "#access-hotel" },
-          { id: "4-5-6", name: "Archway & Luggage Scanning Solution", href: "#access-scanning" },
-          { id: "4-5-7", name: "Vehicle Parking Management System", href: "#access-parking" }
+          { id: "4-5-1", name: "Facial Recognition Solution", href: "/access-facial" },
+          { id: "4-5-2", name: "Bio-Metric Time Attendance Solution", href: "/access-biometric" },
+          { id: "4-5-3", name: "Visitor Management", href: "/access-visitor" },
+          { id: "4-5-4", name: "Gate Barrier Solution", href: "/access-barrier" },
+          { id: "4-5-5", name: "Hotel Series Door Lock", href: "/access-hotel" },
+          { id: "4-5-6", name: "Archway & Luggage Scanning Solution", href: "/access-scanning" },
+          { id: "4-5-7", name: "Vehicle Parking Management System", href: "/access-parking" }
         ]
       },
       { 
         id: "4-6",
         name: "IP Telephone System", 
-        href: "#telephony",
+        href: "/telephony",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-6-1", name: "PABX & Intercom Solution", href: "#telephony-pabx" }
+          { id: "4-6-1", name: "PABX & Intercom Solution", href: "/telephony-pabx" }
         ]
       },
       { 
         id: "4-7",
         name: "Data Center Solution", 
-        href: "#datacenter",
+        href: "/datacenter",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-7-1", name: "Data Center Infrastructure Management (DCIM)", href: "#dcim" },
-          { id: "4-7-2", name: "Environmental Monitoring System", href: "#ems" },
-          { id: "4-7-3", name: "Network Management System", href: "#nms" },
-          { id: "4-7-4", name: "Server/LAN Automation", href: "#server-lan" },
-          { id: "4-7-5", name: "Data Storage Solution", href: "#storage" }
+          { id: "4-7-1", name: "Data Center Infrastructure Management (DCIM)", href: "/dcim" },
+          { id: "4-7-2", name: "Environmental Monitoring System", href: "/ems" },
+          { id: "4-7-3", name: "Network Management System", href: "/nms" },
+          { id: "4-7-4", name: "Server/LAN Automation", href: "/server-lan" },
+          { id: "4-7-5", name: "Data Storage Solution", href: "/storage" }
         ]
       },
       { 
         id: "4-8",
         name: "Enterprise Network Solution", 
-        href: "#network",
+        href: "/network",
         hasSubmenu: true,
         submenuItems: [
-          { id: "4-8-1", name: "Passive LAN Solutions", href: "#passive-lan" },
-          { id: "4-8-2", name: "Fiber Optic Solutions", href: "#fiber-optic" },
-          { id: "4-8-3", name: "Data Center Power System", href: "#dc-power" },
-          { id: "4-8-4", name: "Rack Management Solution", href: "#rack-management" },
-          { id: "4-8-5", name: "Raise Floor System", href: "#raise-floor" },
-          { id: "4-8-6", name: "Online UPS Solution", href: "#online-ups" },
-          { id: "4-8-7", name: "Dehumidifier Solution", href: "#dehumidifier" },
-          { id: "4-8-8", name: "Precision Air Cooling solution", href: "#precision-cooling" }
+          { id: "4-8-1", name: "Passive LAN Solutions", href: "/passive-lan" },
+          { id: "4-8-2", name: "Fiber Optic Solutions", href: "/fiber-optic" },
+          { id: "4-8-3", name: "Data Center Power System", href: "/dc-power" },
+          { id: "4-8-4", name: "Rack Management Solution", href: "/rack-management" },
+          { id: "4-8-5", name: "Raise Floor System", href: "/raise-floor" },
+          { id: "4-8-6", name: "Online UPS Solution", href: "/online-ups" },
+          { id: "4-8-7", name: "Dehumidifier Solution", href: "/dehumidifier" },
+          { id: "4-8-8", name: "Precision Air Cooling solution", href: "/precision-cooling" }
         ]
       }
     ]
@@ -550,15 +550,15 @@ const defaultHeaderMenuItems: NavItemConfig[] = [
   {
     id: "6",
     name: "Gallery",
-    href: "#gallery", 
+    href: "/gallery", 
     hasDropdown: true,
     dropdownItems: [
-      { id: "6-1", name: "Video Gallery", href: "#video-gallery" },
-      { id: "6-2", name: "Photo Gallery", href: "#photo-gallery" }
+      { id: "6-1", name: "Video Gallery", href: "/video-gallery" },
+      { id: "6-2", name: "Photo Gallery", href: "/photo-gallery" }
     ]
   },
-  { id: "7", name: "News", href: "#news" },
-  { id: "8", name: "Contact", href: "#contact" }
+  { id: "7", name: "News", href: "/news" },
+  { id: "8", name: "Contact", href: "/contact" }
 ];
 
 const defaultHeaderButtons: ActionButtonConfig[] = [
@@ -1171,23 +1171,51 @@ export const dataStore = {
 
   getHeaderConfig: (): HeaderConfig => {
     const stored = getStored("ctl_header_config", defaultHeaderConfig);
-    return {
+    const config = {
       logoUrl: "",
       menuItems: defaultHeaderMenuItems,
       buttons: defaultHeaderButtons,
       ...stored
     };
+    if (config.menuItems) {
+      const cleanItem = (item: any): any => {
+        let href = item.href || "";
+        if (href.startsWith("#")) {
+          href = "/" + href.replace("#", "");
+        }
+        const clean: any = { ...item, href };
+        if (item.dropdownItems) {
+          clean.dropdownItems = item.dropdownItems.map(cleanItem);
+        }
+        if (item.submenuItems) {
+          clean.submenuItems = item.submenuItems.map(cleanItem);
+        }
+        return clean;
+      };
+      config.menuItems = config.menuItems.map(cleanItem);
+    }
+    return config;
   },
   saveHeaderConfig: (config: HeaderConfig) => setStored("ctl_header_config", config),
 
   getFooterConfig: (): FooterConfig => {
     const stored = getStored("ctl_footer_config", defaultFooterConfig);
-    return {
+    const config = {
       logoUrl: "",
       socials: defaultFooterConfig.socials,
       quickLinks: defaultFooterConfig.quickLinks,
       ...stored
     };
+    if (config.quickLinks) {
+      config.quickLinks = config.quickLinks.map((link: any) => {
+        let url = link.url || "";
+        if (url.startsWith("#")) {
+          url = "/" + url.replace("#", "");
+        }
+        return { ...link, url };
+      });
+    }
+    return config;
   },
   saveFooterConfig: (config: FooterConfig) => setStored("ctl_footer_config", config),
 

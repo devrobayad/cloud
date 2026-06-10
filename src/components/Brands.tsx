@@ -74,7 +74,8 @@ export default function Brands() {
           <ScrollReveal direction="up" duration={0.6} delay={0.1}>
             <button
               onClick={() => {
-                window.location.hash = "#brands";
+                window.history.pushState(null, "", "/brands");
+                window.dispatchEvent(new Event("popstate"));
               }}
               className="px-6 py-3 bg-[#4F46E5] hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2"
             >

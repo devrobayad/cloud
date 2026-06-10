@@ -76,21 +76,35 @@ export default function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash;
-      const path = window.location.pathname;
+      let hash = window.location.hash;
+      let path = window.location.pathname;
+
+      // Automatically upgrade hash routing if present to prevent # in address bar
+      if (hash) {
+        const key = hash.replace("#", "");
+        if (key) {
+          window.history.replaceState(null, "", `/${key}`);
+          path = `/${key}`;
+          hash = "";
+        }
+      }
+
+      // Automatically default "/" path to "/home"
+      if (path === "/" || path === "") {
+        window.history.replaceState(null, "", "/home");
+        path = "/home";
+      }
 
       const performScroll = (options: ScrollToOptions) => {
         window.scrollTo(options);
       };
 
-      let pageKey = "";
-      if (hash) {
-        pageKey = hash.replace("#", "");
-      } else if (path && path !== "/") {
-        pageKey = path.replace(/^\//, "");
-      }
+      let pageKey = path.replace(/^\//, "");
 
-      if (pageKey === "admin") {
+      if (pageKey === "home") {
+        setCurrentPage("home");
+        performScroll({ top: 0, behavior: "smooth" });
+      } else if (pageKey === "admin") {
         setCurrentPage("admin");
         performScroll({ top: 0, behavior: "smooth" });
       } else if (pageKey === "contact") {
@@ -149,20 +163,8 @@ export default function App() {
         performScroll({ top: 0, behavior: "smooth" });
       } else if (Object.keys(dataStore.getSolutions()).includes(pageKey)) {
         setCurrentPage(pageKey);
-        // Turn off automatic scrolling for service pages as requested
-        // performScroll({ top: 0, behavior: "smooth" });
       } else {
         setCurrentPage("home");
-        if (hash) {
-          // Allow element rendering before scrolling
-          setTimeout(() => {
-            const id = hash.replace("#", "");
-            const element = document.getElementById(id);
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth" });
-            }
-          }, 150);
-        }
       }
     };
 

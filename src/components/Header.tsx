@@ -98,7 +98,11 @@ export default function Header() {
       {/* Top Bar for Phone, Email and Floating Navigation Container */}
       <div className={`max-w-7xl mx-auto rounded-3xl bg-white shadow-lg border border-slate-100 transition-all duration-300 p-3 md:px-8 flex items-center justify-between ${isScrolled ? "bg-opacity-95 backdrop-blur-md" : ""}`}>
         {/* Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => { setIsOpen(false); window.location.hash = "#home"; }}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => { 
+          setIsOpen(false); 
+          window.history.pushState(null, "", "/home");
+          window.dispatchEvent(new Event("popstate"));
+        }}>
           {header.logoUrl ? (
             <img src={header.logoUrl} alt={header.logoText} className="h-10 w-auto object-contain rounded-lg" referrerPolicy="no-referrer" />
           ) : (
@@ -280,7 +284,8 @@ export default function Header() {
               className="flex items-center gap-2.5 cursor-pointer" 
               onClick={() => { 
                 closeDrawer(); 
-                window.location.hash = "#home"; 
+                window.history.pushState(null, "", "/home");
+                window.dispatchEvent(new Event("popstate"));
               }}
             >
               {header.logoUrl ? (

@@ -53,7 +53,8 @@ export default function Footer() {
   };
 
   const handleScrollToSection = (id: string) => {
-    window.location.hash = `#${id}`;
+    window.history.pushState(null, "", `/${id}`);
+    window.dispatchEvent(new Event("popstate"));
   };
 
   const getSocialIcon = (platform: string) => {
@@ -99,25 +100,26 @@ export default function Footer() {
   const socialsToRender = footer.socials && footer.socials.length > 0 ? footer.socials : defaultSocials;
 
   const defaultQuickLinks = [
-    { id: "qk-1", labelText: "Running Projects", url: "#running-projects" },
-    { id: "qk-2", labelText: "CSR Initiatives", url: "#csr" },
-    { id: "qk-3", labelText: "Career Opportunities", url: "#career" },
-    { id: "qk-4", labelText: "Our Brands", url: "#brands" },
+    { id: "qk-1", labelText: "Running Projects", url: "/running-projects" },
+    { id: "qk-2", labelText: "CSR Initiatives", url: "/csr" },
+    { id: "qk-3", labelText: "Career Opportunities", url: "/career" },
+    { id: "qk-4", labelText: "Our Brands", url: "/brands" },
     { id: "qk-5", labelText: "Our Clients", url: "/clients" }
   ];
 
   const quickLinksToRender = footer.quickLinks && footer.quickLinks.length > 0 ? footer.quickLinks : defaultQuickLinks;
 
   const handleQuickLinkClick = (url: string, e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    let targetUrl = url;
     if (url.startsWith("#")) {
-      const id = url.replace("#", "");
-      handleScrollToSection(id);
-    } else if (url.startsWith("/")) {
-      if (e) e.preventDefault();
-      window.history.pushState(null, "", url);
+      targetUrl = "/" + url.replace("#", "");
+    }
+    if (targetUrl.startsWith("/")) {
+      window.history.pushState(null, "", targetUrl);
       window.dispatchEvent(new Event("popstate"));
     } else {
-      window.location.href = url;
+      window.location.href = targetUrl;
     }
   };
 
@@ -274,9 +276,21 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2.5">
           <span>{footer.copyrightText}</span>
           <div className="flex items-center gap-4 text-slate-600">
-            <a href="#privacy-policy" className="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+            <a 
+              href="/privacy-policy" 
+              onClick={(e) => handleQuickLinkClick("/privacy-policy", e)} 
+              className="hover:text-indigo-400 transition-colors"
+            >
+              Privacy Policy
+            </a>
             <span>•</span>
-            <a href="#terms-of-use" className="hover:text-indigo-400 transition-colors">Terms of Use</a>
+            <a 
+              href="/terms-of-use" 
+              onClick={(e) => handleQuickLinkClick("/terms-of-use", e)} 
+              className="hover:text-indigo-400 transition-colors"
+            >
+              Terms of Use
+            </a>
           </div>
         </div>
       </div>

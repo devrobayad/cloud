@@ -123,7 +123,10 @@ export default function Solutions() {
               >
                 <div 
                   id={item.id}
-                  onClick={() => { window.location.hash = "#" + item.id; }}
+                  onClick={() => { 
+                    window.history.pushState(null, "", "/" + item.id);
+                    window.dispatchEvent(new Event("popstate"));
+                  }}
                   className="group h-full flex flex-col bg-[#ffffff] rounded-2xl overflow-hidden shadow-md hover:shadow-xl border border-slate-100 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
                 >
                   {/* Image Section */}
