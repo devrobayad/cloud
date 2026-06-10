@@ -99,7 +99,7 @@ export default function CareerPage() {
               <span className="text-indigo-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full mb-4 inline-block">
                 Our Work Ethics
               </span>
-              <h2 className="text-3xl font-extrabold text-[#1e1b4b] mb-6">
+              <h2 className="text-3xl font-extrabold text-[#243D7A] mb-6">
                 Learn, Innovate & Grow Together with Absolute Integrity
               </h2>
               <div className="prose prose-slate text-slate-600 text-sm leading-relaxed mb-6 space-y-4">
@@ -134,7 +134,7 @@ export default function CareerPage() {
         {/* Benefits Grid */}
         <div className="mb-20">
           <ScrollReveal direction="up" duration={0.6}>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1e1b4b] text-center mb-4">Why Work with Us?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#243D7A] text-center mb-4">Why Work with Us?</h2>
             <p className="text-slate-500 text-sm text-center mb-12 max-w-xl mx-auto">Explore the resources, growth environments, and professional incentives we supply across our national divisions.</p>
           </ScrollReveal>
 
@@ -164,8 +164,8 @@ export default function CareerPage() {
           {/* Active Job Openings List */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             <ScrollReveal direction="right" duration={0.6}>
-              <h3 className="text-2xl font-bold text-[#1e1b4b] mb-2 flex items-center gap-2">
-                <Briefcase className="w-6 h-6 text-[#1e1b4b]" />
+              <h3 className="text-2xl font-bold text-[#243D7A] mb-2 flex items-center gap-2">
+                <Briefcase className="w-6 h-6 text-[#243D7A]" />
                 Active Openings
               </h3>
               <p className="text-slate-500 text-xs mb-4">We are actively sourcing talented professionals to join our offices and field engineering sections.</p>
@@ -232,7 +232,7 @@ export default function CareerPage() {
           {/* Quick Apply Form Section */}
           <ScrollReveal direction="left" duration={0.8} className="lg:col-span-5 h-full">
             <div id="apply-form" className="bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm sticky top-28">
-              <h3 className="text-xl font-bold text-[#1e1b4b] mb-2 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-[#243D7A] mb-2 flex items-center gap-2">
                 <Send className="w-5 h-5 text-indigo-600" />
                 Quick Apply
               </h3>
@@ -352,7 +352,7 @@ export default function CareerPage() {
 
                   <button 
                     type="submit"
-                    className="w-full bg-[#1e1b4b] hover:bg-slate-900 text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer h-12"
+                    className="w-full bg-[#243D7A] hover:bg-[#2E6FA8] text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer h-12"
                   >
                     <Send className="w-4 h-4 ml-1" />
                     Submit Application

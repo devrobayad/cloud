@@ -276,7 +276,7 @@ export default function Header() {
 
       {/* Mobile Drawer - Immersive same-to-same design with the header photo */}
       {isOpen && (
-        <div className="fixed inset-0 z-[100] bg-[#16143c] xl:hidden flex flex-col overflow-hidden animate-in fade-in slide-in-from-top duration-300">
+        <div className="fixed inset-0 z-[100] bg-[#243D7A] xl:hidden flex flex-col overflow-hidden animate-in fade-in slide-in-from-top duration-300">
           {/* Top Row: Brand Logo Panel (White BG) and Custom Dark Close Button */}
           <div className="bg-white px-5 py-4 flex items-center justify-between border-b border-slate-100 shadow-sm">
             {/* Logo Layout */}
@@ -308,7 +308,7 @@ export default function Header() {
             {/* Premium Dark Navy Rounded Close Button with white close icon */}
             <button
               onClick={closeDrawer}
-              className="p-3 bg-[#1a1844] hover:bg-[#25215c] text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center transform active:scale-95"
+              className="p-3 bg-[#243D7A] hover:bg-[#2E6FA8] text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center transform active:scale-95"
               aria-label="Close menu"
             >
               <X className="w-5 h-5 stroke-[2.5]" />
@@ -316,7 +316,7 @@ export default function Header() {
           </div>
 
           {/* Scrolling Corporate Dark Navy List Menu panel */}
-          <div className="flex-1 bg-[#1a1844] overflow-y-auto px-5 py-4 pb-12">
+          <div className="flex-1 bg-[#243D7A] overflow-y-auto px-5 py-4 pb-12">
             <nav className="flex flex-col">
               {menuItems.map((item) => {
                 const isExpanded = expandedMenu === item.name;
@@ -361,7 +361,7 @@ export default function Header() {
 
                     {/* Level 2 Submenus container (Initially Closed, toggles on parent click) */}
                     {item.hasDropdown && item.dropdownItems && isExpanded && (
-                      <div className="mt-1 ml-4 pl-3 border-l-2 border-indigo-500/40   flex flex-col gap-1 py-1.5 bg-[#131135]/80 rounded-xl overflow-hidden transition-all duration-300">
+                      <div className="mt-1 ml-4 pl-3 border-l-2 border-indigo-500/40   flex flex-col gap-1 py-1.5 bg-[#182A55]/80 rounded-xl overflow-hidden transition-all duration-300">
                         {item.dropdownItems.map((subItem) => {
                           const isSubExpanded = expandedSubmenu === subItem.name;
                           return (
@@ -379,7 +379,7 @@ export default function Header() {
 
                                   {/* Level 3 Sub-submenu Items (Initially Closed, toggles on click) */}
                                   {isSubExpanded && (
-                                    <div className="ml-5 pl-3 mt-1 mb-1 border-l border-indigo-400/30 flex flex-col gap-1.5 py-1 bg-[#100e2b]/95 rounded-lg">
+                                    <div className="ml-5 pl-3 mt-1 mb-1 border-l border-indigo-400/30 flex flex-col gap-1.5 py-1 bg-[#111E3C]/95 rounded-lg">
                                       {subItem.submenuItems.map((nestedItem) => (
                                         <a
                                           key={nestedItem.name}

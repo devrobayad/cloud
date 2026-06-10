@@ -184,7 +184,7 @@ export default function Contact() {
                   <span className="p-2 sm:p-2.5 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
                     <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
                   </span>
-                  <h2 className="text-[#1e1b4b] font-extrabold text-lg sm:text-2xl tracking-[0.03em] uppercase font-sans">
+                  <h2 className="text-[#243D7A] font-extrabold text-lg sm:text-2xl tracking-[0.03em] uppercase font-sans">
                     REQUEST SITE SURVEY
                   </h2>
                 </div>
@@ -289,7 +289,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#4f46e5] hover:bg-[#4338ca] active:scale-[0.99] disabled:opacity-75 disabled:scale-100 text-white font-bold text-xs sm:text-sm py-4 rounded-xl transition-all shadow-md active:shadow flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider h-12 md:h-14"
+                    className="w-full bg-[#2E6FA8] hover:bg-[#243D7A] active:scale-[0.99] disabled:opacity-75 disabled:scale-100 text-white font-bold text-xs sm:text-sm py-4 rounded-xl transition-all shadow-md active:shadow flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider h-12 md:h-14"
                   >
                     <Send className="w-4 h-4 fill-white text-transparent transform rotate-[-25deg]" />
                     <span>{isSubmitting ? "Submitting Request..." : "Send Free Survey Request"}</span>

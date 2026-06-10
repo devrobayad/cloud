@@ -4,6 +4,32 @@
 @theme {
   --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
   --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
+
+  /* Corporate Brand Color variables mapping */
+  --color-brand-light: #3A9AD9;
+  --color-brand-medium: #2E6FA8;
+  --color-brand-dark: #243D7A;
+
+  /* Overrides for standard Tailwind classes to automatically match your color scheme */
+  --color-indigo-50: #f0f7fb;
+  --color-indigo-100: #e0f0f8;
+  --color-indigo-200: #bae0f3;
+  --color-indigo-300: #8ecdef;
+  --color-indigo-400: #3A9AD9;
+  --color-indigo-500: #3A9AD9; /* Light Blue */
+  --color-indigo-600: #2E6FA8; /* Medium Blue */
+  --color-indigo-700: #243D7A; /* Dark Blue */
+  --color-indigo-800: #1d3162;
+  --color-indigo-900: #19274e;
+  --color-indigo-950: #101931;
+
+  --color-blue-500: #3A9AD9;
+  --color-blue-600: #2E6FA8;
+  --color-blue-700: #243D7A;
+  
+  --color-violet-500: #3A9AD9;
+  --color-violet-600: #2E6FA8;
+  --color-violet-700: #243D7A;
 }
 
 html {
@@ -57,7 +83,11 @@ header nav button *,
 div[class*="bg-[#16143c]"] nav a,
 div[class*="bg-[#16143c]"] nav button,
 div[class*="bg-[#16143c]"] nav a *,
-div[class*="bg-[#16143c]"] nav button * {
+div[class*="bg-[#16143c]"] nav button *,
+div[class*="bg-[#243D7A]"] nav a,
+div[class*="bg-[#243D7A]"] nav button,
+div[class*="bg-[#243D7A]"] nav a *,
+div[class*="bg-[#243D7A]"] nav button * {
   font-size: 16px !important;
 }
 

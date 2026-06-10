@@ -60,7 +60,7 @@ export default function CSRPage() {
         {/* Intro */}
         <ScrollReveal direction="up" duration={0.6}>
           <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-extrabold text-[#1e1b4b] mb-4">Our Commitment to Society</h2>
+            <h2 className="text-3xl font-extrabold text-[#243D7A] mb-4">Our Commitment to Society</h2>
             <div className="w-16 h-1 bg-indigo-600 mx-auto mb-6 rounded-full" />
             <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
               At <span className="font-bold text-slate-900">Cloud Technologies</span>, we believe that real corporate leadership goes beyond commercial services. True craftsmanship is defined by how we give back. Through our CSR pillars, we strive to build equal tech opportunities, secure clean environments, and provide instant disaster relief across the nation.
@@ -111,7 +111,7 @@ export default function CSRPage() {
 
         {/* Global Impact Numbers */}
         <ScrollReveal direction="up" duration={0.8} delay={0.1}>
-          <div className="bg-[#1e1b4b] rounded-3xl p-10 mb-20 text-white relative overflow-hidden">
+          <div className="bg-[#243D7A] rounded-3xl p-10 mb-20 text-white relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#4338ca,transparent)] opacity-30 pointer-events-none" />
             <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-indigo-800/60">
               <div className="pt-6 md:pt-0">
@@ -133,7 +133,7 @@ export default function CSRPage() {
         {/* Recent Actions & Stories */}
         <div>
           <ScrollReveal direction="up" duration={0.6}>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1e1b4b] mb-4 text-center">Recent CSR Highlights</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#243D7A] mb-4 text-center">Recent CSR Highlights</h2>
             <p className="text-slate-500 text-sm text-center mb-12">Tracking our social responsibility actions and real-world results month by month.</p>
           </ScrollReveal>
 
@@ -160,7 +160,7 @@ export default function CSRPage() {
                     <h4 className="font-extrabold text-slate-900 text-lg mb-2">{story.title}</h4>
                     <p className="text-slate-600 text-sm leading-relaxed mb-4">{story.desc}</p>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e1b4b]">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#243D7A]">
                     <MapPin className="w-3.5 h-3.5 text-indigo-600" />
                     <span>{story.location}</span>
                   </div>
