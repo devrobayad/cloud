@@ -11,12 +11,10 @@ export default function ClientLogoRenderer({ client }: { client: DBClient }) {
       <div className="flex flex-col items-center justify-center text-center p-1 select-none pointer-events-none">
         <img 
           src={logoUrl} 
-          alt={client.name} 
+          alt={client.name || "Client Logo"} 
           referrerPolicy="no-referrer"
-          className="max-h-12 max-w-[120px] object-contain rounded-md select-none" 
+          className="max-h-20 max-w-[150px] object-contain rounded-md select-none" 
         />
-        <span className="font-extrabold text-[#1f2937] text-[10px] uppercase tracking-tight truncate max-w-[130px] mt-1.5">{client.name}</span>
-        <span className="text-[7px] font-bold text-slate-450 uppercase truncate max-w-[120px] tracking-wide leading-none mt-0.5">{category || "Valued Client"}</span>
       </div>
     );
   }

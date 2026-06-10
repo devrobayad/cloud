@@ -10,12 +10,10 @@ export default function BrandLogoRenderer({ brand }: { brand: DBBrand }) {
       <div className="flex flex-col items-center justify-center text-center p-1 select-none pointer-events-none">
         <img 
           src={logoUrl} 
-          alt={brand.name} 
+          alt={brand.name || "Brand Logo"} 
           referrerPolicy="no-referrer"
-          className="max-h-12 max-w-[120px] object-contain rounded-md select-none" 
+          className="max-h-20 max-w-[150px] object-contain rounded-md select-none" 
         />
-        <span className="font-extrabold text-[#1f2937] text-[10px] uppercase tracking-tight truncate max-w-[130px] mt-1.5">{brand.name}</span>
-        <span className="text-[7px] font-bold text-slate-400 uppercase truncate max-w-[120px] tracking-widest mt-0.5">{sub || "Technology partner"}</span>
       </div>
     );
   }

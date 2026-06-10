@@ -1,16 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
-  font-family: var(--font-sans);
+  font-family: var(--font-sans) !important;
+  font-size: 18px !important; /* Increases REM-based responsive font sizes by 2px globally (Default 16px -> 18px) */
 }
 
-h1, h2, h3, h4, .font-display {
-  font-family: var(--font-display);
+/* Apply Poppins font family globally to all elements */
+*, *::before, *::after {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
 }
+
+/* Custom layout container override to occupy 90% structure width on wide viewports (৯টি পার্সেন্ট উইডথ কনটেইনার) */
+@media (min-width: 1024px) {
+  .max-w-7xl {
+    max-width: 90% !important;
+  }
+}
+
+/* Global <p> tag font size override to 16px (ফন্ট সাইজ ১৬ পিক্সেল) */
+p, p * {
+  font-size: 16px !important;
+}
+
+/* Global <span> tag size fixed to 14px (সকল স্প্যান ট্যাগের সাইজ ১৪ পিক্সেল) */
+span {
+  font-size: 14px !important;
+}
+
+/* Global <label> tag size fixed to 14px (সকল লেবেল ট্যাগের সাইজ ১৪ পিক্সেল) */
+label, label * {
+  font-size: 14px !important;
+}
+
+/* Global Footer text, links, and list items to 16px (ফুটারের সকল টেক্সট ও লিংক ১৬ পিক্সেল) */
+#footer,
+#footer p,
+#footer a,
+#footer button,
+#footer span,
+#footer li {
+  font-size: 16px !important;
+}
+
+/* Header navigation links, sub-navigation links, dropdown texts, and header buttons to exactly 16px (হেডারের সকল লিংক, সাব-লিংক ও বাটনের সাইজ ১৬ পিক্সেল) */
+header nav a,
+header nav button,
+header nav a *,
+header nav button *,
+div[class*="bg-[#16143c]"] nav a,
+div[class*="bg-[#16143c]"] nav button,
+div[class*="bg-[#16143c]"] nav a *,
+div[class*="bg-[#16143c]"] nav button * {
+  font-size: 16px !important;
+}
+
+/* Slider CTA buttons, navigation buttons, and text color to exactly #ffffff (স্লাইডারের সকল বাটনের টেক্সট কালার সাদা) */
+#home a,
+#home button,
+#home a *,
+#home button * {
+  color: #ffffff !important;
+}
+
+
+

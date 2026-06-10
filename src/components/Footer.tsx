@@ -20,12 +20,14 @@ export default function Footer() {
   const [contact, setContact] = useState(() => dataStore.getContactInfo());
   const [footer, setFooter] = useState(() => dataStore.getFooterConfig());
   const [header, setHeader] = useState(() => dataStore.getHeaderConfig());
+  const [floatingChats, setFloatingChats] = useState(() => dataStore.getFloatingChats());
 
   useEffect(() => {
     const handleUpdate = () => {
       setContact(dataStore.getContactInfo());
       setFooter(dataStore.getFooterConfig());
       setHeader(dataStore.getHeaderConfig());
+      setFloatingChats(dataStore.getFloatingChats());
     };
     window.dispatchEvent(new Event("datastore-update-local")); // debug hook
     window.addEventListener("datastore-update", handleUpdate);
@@ -72,6 +74,22 @@ export default function Footer() {
     }
   };
 
+  const getFloatingChatIcon = (platform: string) => {
+    const plat = platform.toLowerCase().replace(/\s/g, "");
+    switch (plat) {
+      case "whatsapp":
+        return <MessageCircle className="w-5.5 h-5.5 fill-white" />;
+      case "messenger":
+        return <MessageSquare className="w-5 h-5 fill-white" />;
+      case "phone":
+        return <Phone className="w-5 h-5" />;
+      case "email":
+        return <Mail className="w-5 h-5" />;
+      default:
+        return <MessageCircle className="w-5.5 h-5.5 fill-white" />;
+    }
+  };
+
   const defaultSocials = [
     { id: "soc-1", platform: "Facebook", url: footer.facebookUrl || "https://facebook.com" },
     { id: "soc-2", platform: "LinkedIn", url: footer.linkedinUrl || "https://linkedin.com" },
@@ -85,15 +103,19 @@ export default function Footer() {
     { id: "qk-2", labelText: "CSR Initiatives", url: "#csr" },
     { id: "qk-3", labelText: "Career Opportunities", url: "#career" },
     { id: "qk-4", labelText: "Our Brands", url: "#brands" },
-    { id: "qk-5", labelText: "Our Clients", url: "#clients" }
+    { id: "qk-5", labelText: "Our Clients", url: "/clients" }
   ];
 
   const quickLinksToRender = footer.quickLinks && footer.quickLinks.length > 0 ? footer.quickLinks : defaultQuickLinks;
 
-  const handleQuickLinkClick = (url: string) => {
+  const handleQuickLinkClick = (url: string, e?: React.MouseEvent) => {
     if (url.startsWith("#")) {
       const id = url.replace("#", "");
       handleScrollToSection(id);
+    } else if (url.startsWith("/")) {
+      if (e) e.preventDefault();
+      window.history.pushState(null, "", url);
+      window.dispatchEvent(new Event("popstate"));
     } else {
       window.location.href = url;
     }
@@ -155,7 +177,7 @@ export default function Footer() {
               {quickLinksToRender.map((link) => (
                 <li key={link.id}>
                   <button 
-                    onClick={() => handleQuickLinkClick(link.url)} 
+                    onClick={(e) => handleQuickLinkClick(link.url, e)} 
                     className="hover:text-white hover:underline transition-all text-left cursor-pointer font-sans"
                   >
                     {link.labelText}
@@ -212,27 +234,28 @@ export default function Footer() {
       {/* Floating Buttons: WhatsApp, Messenger, and ScrollToTop */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40 select-none">
         
-        {/* Messenger Action Floating Button */}
-        <a 
-          href={contact.facebookPage} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all text-xs"
-          title="Open Messenger"
-        >
-          <MessageSquare className="w-5 h-5 fill-white" />
-        </a>
-
-        {/* WhatsApp Action Floating Button */}
-        <a 
-          href={contact.whatsapp} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-12 h-11.5 rounded-full bg-green-500 hover:bg-green-400 text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all"
-          title="Chat on WhatsApp"
-        >
-          <MessageCircle className="w-5.5 h-5.5 fill-white" />
-        </a>
+        {floatingChats.filter(chat => chat.active).map((chat) => (
+          <a 
+            key={chat.id}
+            href={chat.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={`w-12 h-12 rounded-full text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all ${
+              chat.color && !chat.color.startsWith('#') ? chat.color : (!chat.color ? "bg-indigo-600 hover:bg-indigo-500" : "")
+            }`}
+            style={chat.color && chat.color.startsWith('#') ? { backgroundColor: chat.color } : undefined}
+            title={chat.label || chat.platform}
+          >
+            {chat.svgCode ? (
+              <span 
+                className="w-6 h-6 flex items-center justify-center [&>svg]:w-6 [&>svg]:h-6 [&>svg]:block"
+                dangerouslySetInnerHTML={{ __html: chat.svgCode }}
+              />
+            ) : (
+              getFloatingChatIcon(chat.platform)
+            )}
+          </a>
+        ))}
 
         {/* Dynamic Scroll to top arrow */}
         {showScroll && (

@@ -70,18 +70,18 @@ export default function Clients() {
         </div>
 
         {/* Buttons to See All */}
-        {clients.length > 12 && (
-          <div className="flex justify-center mt-10">
-            <ScrollReveal direction="up" duration={0.6} delay={0.1}>
-              <button
-                onClick={() => setShowAll(!showAll)}
-                className="px-6 py-3 bg-[#4F46E5] hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2"
-              >
-                {showAll ? "Show Less" : "See All Clients"}
-              </button>
-            </ScrollReveal>
-          </div>
-        )}
+        <div className="flex justify-center mt-10">
+          <ScrollReveal direction="up" duration={0.6} delay={0.1}>
+            <button
+              onClick={() => {
+                window.location.hash = "#clients";
+              }}
+              className="px-6 py-3 bg-[#4F46E5] hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2"
+            >
+              See All Clients
+            </button>
+          </ScrollReveal>
+        </div>
 
       </div>
     </section>

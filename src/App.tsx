@@ -77,70 +77,78 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
+      const path = window.location.pathname;
 
       const performScroll = (options: ScrollToOptions) => {
         window.scrollTo(options);
       };
 
-      if (hash === "#admin") {
+      let pageKey = "";
+      if (hash) {
+        pageKey = hash.replace("#", "");
+      } else if (path && path !== "/") {
+        pageKey = path.replace(/^\//, "");
+      }
+
+      if (pageKey === "admin") {
         setCurrentPage("admin");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#contact") {
+      } else if (pageKey === "contact") {
         setCurrentPage("contact");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#news") {
+      } else if (pageKey === "news") {
         setCurrentPage("news");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#video-gallery") {
+      } else if (pageKey === "video-gallery") {
         setCurrentPage("video-gallery");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#photo-gallery") {
+      } else if (pageKey === "photo-gallery") {
         setCurrentPage("photo-gallery");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#clients") {
+      } else if (pageKey === "clients") {
         setCurrentPage("clients");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#running-projects") {
+      } else if (pageKey === "running-projects") {
         setCurrentPage("running-projects");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#completed-projects") {
+      } else if (pageKey === "completed-projects") {
         setCurrentPage("completed-projects");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#about") {
+      } else if (pageKey === "about") {
         setCurrentPage("about");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#chairman") {
+      } else if (pageKey === "chairman") {
         setCurrentPage("chairman");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#md") {
+      } else if (pageKey === "md") {
         setCurrentPage("md");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#vision") {
+      } else if (pageKey === "vision") {
         setCurrentPage("vision");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#management") {
+      } else if (pageKey === "management") {
         setCurrentPage("management");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#why-choose-us") {
+      } else if (pageKey === "why-choose-us") {
         setCurrentPage("why-choose-us");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#csr") {
+      } else if (pageKey === "csr") {
         setCurrentPage("csr");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#career") {
+      } else if (pageKey === "career") {
         setCurrentPage("career");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#privacy-policy") {
+      } else if (pageKey === "privacy-policy") {
         setCurrentPage("privacy-policy");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#terms-of-use") {
+      } else if (pageKey === "terms-of-use") {
         setCurrentPage("terms-of-use");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (hash === "#brands") {
+      } else if (pageKey === "brands") {
         setCurrentPage("brands");
         performScroll({ top: 0, behavior: "smooth" });
-      } else if (Object.keys(dataStore.getSolutions()).map(k => "#" + k).includes(hash)) {
-        setCurrentPage(hash.replace("#", ""));
+      } else if (Object.keys(dataStore.getSolutions()).includes(pageKey)) {
+        setCurrentPage(pageKey);
         // Turn off automatic scrolling for service pages as requested
         // performScroll({ top: 0, behavior: "smooth" });
       } else {
@@ -162,7 +170,11 @@ export default function App() {
     handleHashChange();
 
     window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handleHashChange);
+    };
   }, []);
 
   const [loadTrigger, setLoadTrigger] = useState(0);

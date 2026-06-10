@@ -57,14 +57,10 @@ export default function BrandsPage() {
                     target: "_blank",
                     rel: "noopener noreferrer"
                   } : {})}
-                  className={`flex flex-col items-center justify-between p-6 bg-white border border-slate-200/60 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer w-full text-center overflow-hidden ${brand.color}`}
+                  className={`flex flex-col items-center justify-center p-6 bg-white border border-slate-200/60 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer w-full text-center overflow-hidden h-[150px] ${brand.color}`}
                 >
-                  <div className="h-[110px] w-full flex items-center justify-center transition-transform duration-300 group-hover:scale-115 select-none">
+                  <div className="w-full flex items-center justify-center transition-transform duration-300 group-hover:scale-115 select-none">
                     <BrandLogoRenderer brand={brand} />
-                  </div>
-                  <div className="mt-4 text-center select-none w-full border-t border-slate-100 pt-4">
-                    <h3 className="font-bold text-[#1f2937] text-xs uppercase tracking-tight truncate">{brand.name}</h3>
-                    <p className="text-indigo-600 text-[10px] font-extrabold uppercase tracking-widest mt-1">{brand.sub}</p>
                   </div>
                 </LinkTag>
               </ScrollReveal>

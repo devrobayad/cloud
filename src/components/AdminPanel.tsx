@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { 
-  Lock, Unlock, Shield, AlertCircle, LayoutDashboard, MessageSquare, 
+  Lock, Unlock, Shield, AlertCircle, LayoutDashboard, MessageSquare, MessageCircle,
   FileText, Briefcase, Image as ImageIcon, Video, LogOut, CheckCircle, 
   Trash2, Plus, Edit2, Save, X, Search, Clock, ExternalLink, RefreshCw, Eye,
   Upload, Users, Award, BarChart2, Sliders, Share2, Link as LinkIcon, HelpCircle,
@@ -15,10 +15,12 @@ import {
   dataStore, NewsItem, ProjectItem, PhotoItem, VideoItem, InquiryItem, ContactInfo, DBClient, DBBrand,
   AboutConfig, ChairmanConfig, MDConfig, VisionMissionConfig, TeamMemberConfig, WhyChooseReason, HeroSlide,
   TestimonialItem, StatItem, HeaderConfig, FooterConfig, SocialLink, QuickLink, AdminAuthConfig,
-  NavItemConfig, NavDropdownItem, SubMenuItem, EmailIntegrationConfig, MySQLConfig
+  NavItemConfig, NavDropdownItem, SubMenuItem, EmailIntegrationConfig, MySQLConfig, FloatingChat
 } from "../utils/dataStore";
 import ClientLogoRenderer from "./ClientLogoRenderer";
 import BrandLogoRenderer from "./BrandLogoRenderer";
+
+const DEFAULT_WHATSAPP_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.705 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
 export default function AdminPanel() {
   // Authentication State
@@ -34,7 +36,7 @@ export default function AdminPanel() {
   const [adminCredentialsSuccess, setAdminCredentialsSuccess] = useState("");
 
   // Navigation Panel State
-  const [activeTab, setActiveTab] = useState<"dashboard" | "inquiries" | "news" | "running-projects" | "completed-projects" | "photos" | "videos" | "solutions" | "contact-info font-sans" | "contact-info" | "clients" | "brands" | "about-sublinks" | "hero-slider" | "testimonials" | "stats" | "header-footer font-sans" | "header-footer" | "admin-settings" | "email-settings">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "inquiries" | "news" | "running-projects" | "completed-projects" | "photos" | "videos" | "solutions" | "contact-info font-sans" | "contact-info" | "clients" | "brands" | "about-sublinks" | "hero-slider" | "testimonials" | "stats" | "header-footer font-sans" | "header-footer" | "admin-settings" | "email-settings" | "floating-chats">("dashboard");
 
   // MySQL Integration States
   const [mysqlConfig, setMysqlConfig] = useState<MySQLConfig>(() => dataStore.getMySQLConfig());
@@ -97,6 +99,20 @@ export default function AdminPanel() {
     avatar: ""
   });
   const [saveTestimonialSuccess, setSaveTestimonialSuccess] = useState("");
+
+  // Floating Chats States
+  const [floatingChats, setFloatingChats] = useState<FloatingChat[]>(() => dataStore.getFloatingChats());
+  const [isAddingFloatingChat, setIsAddingFloatingChat] = useState(false);
+  const [editingFloatingChatIndex, setEditingFloatingChatIndex] = useState<number | null>(null);
+  const [floatingChatForm, setFloatingChatForm] = useState<Omit<FloatingChat, "id">>({
+    platform: "Custom SVG",
+    url: "",
+    label: "",
+    color: "bg-indigo-600 hover:bg-indigo-500",
+    active: true,
+    svgCode: ""
+  });
+  const [saveFloatingChatSuccess, setSaveFloatingChatSuccess] = useState("");
 
   // Stats States
   const [displayStats, setDisplayStats] = useState<StatItem[]>(() => dataStore.getDisplayStats());
@@ -1169,6 +1185,7 @@ export default function AdminPanel() {
 
     dataStore.saveTestimonials(currentTestis);
     setTestimonials(currentTestis);
+    window.dispatchEvent(new Event("testimonials-updated"));
     setIsAddingTestimonial(false);
     setEditingTestimonialIndex(null);
     setTestimonialForm({
@@ -1192,9 +1209,94 @@ export default function AdminPanel() {
       const updated = testimonials.filter((_, i) => i !== index);
       dataStore.saveTestimonials(updated);
       setTestimonials(updated);
+      window.dispatchEvent(new Event("testimonials-updated"));
       setSaveTestimonialSuccess("Testimonial deleted successfully!");
       setTimeout(() => {
         setSaveTestimonialSuccess("");
+      }, 4000);
+    }
+  };
+
+  const handleSvgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith(".svg") && file.type !== "image/svg+xml") {
+      alert("Please upload a valid .svg file.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (text.includes("<svg") && text.includes("</svg>")) {
+        setFloatingChatForm(prev => ({
+          ...prev,
+          svgCode: text
+        }));
+      } else {
+        alert("Selected file does not appear to contain valid SVG code.");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleSaveFloatingChat = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!floatingChatForm.url || !floatingChatForm.label) {
+      alert("Please fill in all required fields (URL/Link and Label).");
+      return;
+    }
+
+    if (!floatingChatForm.svgCode || !floatingChatForm.svgCode.trim()) {
+      alert("Please upload an SVG icon file or paste SVG markup code.");
+      return;
+    }
+
+    const currentChats = [...floatingChats];
+    if (editingFloatingChatIndex !== null) {
+      currentChats[editingFloatingChatIndex] = {
+        ...currentChats[editingFloatingChatIndex],
+        ...floatingChatForm
+      };
+      setSaveFloatingChatSuccess("Floating chat option updated successfully!");
+    } else {
+      const newChat: FloatingChat = {
+        id: "fc-" + Date.now(),
+        ...floatingChatForm
+      };
+      currentChats.push(newChat);
+      setSaveFloatingChatSuccess("New floating chat option added successfully!");
+    }
+
+    dataStore.saveFloatingChats(currentChats);
+    setFloatingChats(currentChats);
+    window.dispatchEvent(new Event("datastore-update"));
+    setIsAddingFloatingChat(false);
+    setEditingFloatingChatIndex(null);
+    setFloatingChatForm({
+      platform: "Custom SVG",
+      url: "",
+      label: "",
+      color: "bg-indigo-600 hover:bg-indigo-500",
+      active: true,
+      svgCode: ""
+    });
+
+    setTimeout(() => {
+      setSaveFloatingChatSuccess("");
+    }, 4000);
+  };
+
+  const handleDeleteFloatingChat = (index: number) => {
+    if (window.confirm("Are you sure you want to remove this floating chat option?")) {
+      const updated = floatingChats.filter((_, i) => i !== index);
+      dataStore.saveFloatingChats(updated);
+      setFloatingChats(updated);
+      window.dispatchEvent(new Event("datastore-update"));
+      setSaveFloatingChatSuccess("Floating chat option removed successfully!");
+      setTimeout(() => {
+        setSaveFloatingChatSuccess("");
       }, 4000);
     }
   };
@@ -1942,6 +2044,18 @@ export default function AdminPanel() {
           >
             <MessageSquare className="w-4 h-4" />
             <span>Testimonials</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab("floating-chats"); setSearchQuery(""); }}
+            className={`w-full flex items-center gap-2.5 px-4 py-3 rounded-xl font-extrabold text-sm transition-all cursor-pointer ${
+              activeTab === "floating-chats" 
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/10" 
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }`}
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Floating Chat Icons</span>
           </button>
 
           <button
@@ -4241,9 +4355,9 @@ export default function AdminPanel() {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">External Website Link (Optional)</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">External Website Link</label>
                         <input
                           type="text"
                           value={clientForm.link}
@@ -4253,50 +4367,8 @@ export default function AdminPanel() {
                         />
                       </div>
 
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Logo Label / Text Badge (Optional)</label>
-                        <input
-                          type="text"
-                          value={clientForm.logoText}
-                          onChange={(e) => setClientForm({ ...clientForm, logoText: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold"
-                          placeholder="e.g. BB, HBL or GREEN GOLD"
-                        />
-                      </div>
-
-                      <div className="md:col-span-2">
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Visual Styling Theme & Emblem Preset</label>
-                        <select
-                          value={clientForm.logoStyle}
-                          onChange={(e) => setClientForm({ ...clientForm, logoStyle: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold"
-                        >
-                          <option value="blue">Standard Fallback Blue Badge Theme</option>
-                          <option value="green">Standard Fallback Emerald Badge Theme</option>
-                          <option value="red">Standard Fallback Ruby Badge Theme</option>
-                          <option value="indigo">Standard Fallback Indigo Badge Theme</option>
-                          <option value="purple">Standard Fallback Royal Purple Theme</option>
-                          <option value="amber">Standard Fallback Amber / Yellow Theme</option>
-                          <option value="rose">Standard Fallback Rose Quartz Theme</option>
-                          <option value="teal">Standard Fallback Teal / Cyan Theme</option>
-                          <option disabled>--- Premium Default Presets ---</option>
-                          <option value="baywatch">Baywatch Resort (Blue BW Emblem)</option>
-                          <option value="greengold">Green Gold Farm (Emerald GG Leaf)</option>
-                          <option value="farazy">Farazy Hospital (Red Cross & Stacked Text)</option>
-                          <option value="hbl">HBL Pakistan (Bold Classic Green Text)</option>
-                          <option value="citizens">Citizens Bank (Dual Amber-Teal Dots)</option>
-                          <option value="gov">Ministry of Women (Red Landmark & Badge)</option>
-                          <option value="ambala">Ambala Foundation (Red Brand Label)</option>
-                          <option value="buro">BURO Bangladesh (Slate-Sky Block)</option>
-                          <option value="dun">Dun & Bradstreet (Blue Serifs italic)</option>
-                          <option value="abc">ABC Corp (Indigo Gradient Block)</option>
-                          <option value="solaiman">Solaiman Group (Classic Green Capitals)</option>
-                          <option value="anwar">Anwar Group (Ruby-bordered badge)</option>
-                        </select>
-                      </div>
-
                       {/* Image Upload for Client */}
-                      <div className="md:col-span-2 bg-white border border-slate-200/80 p-4 rounded-xl flex flex-col sm:flex-row items-center gap-5 justify-between">
+                      <div className="bg-white border border-slate-200/80 p-4 rounded-xl flex flex-col sm:flex-row items-center gap-5 justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-16 h-16 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
                             {clientForm.logoUrl ? (
@@ -4306,9 +4378,9 @@ export default function AdminPanel() {
                             )}
                           </div>
                           <div>
-                            <span className="block text-slate-800 text-xs font-bold font-sans">Custom Client Logo (Optional)</span>
+                            <span className="block text-slate-800 text-xs font-bold font-sans">Client Logo Image</span>
                             <span className="block text-slate-400 text-[10px] font-semibold mt-0.5 max-w-sm">
-                              Upload a clean corporate logo or emblem. Overrides the preset/shape selection above. (Max size 2MB)
+                              Upload a clean corporate logo or brand image. (Max size 2MB)
                             </span>
                           </div>
                         </div>
@@ -4456,31 +4528,9 @@ export default function AdminPanel() {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Brand Name (Optional)</label>
-                        <input
-                          type="text"
-                          value={brandForm.name}
-                          onChange={(e) => setBrandForm({ ...brandForm, name: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold"
-                          placeholder="e.g. CISCO or MIKROTIK"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Product Niche / Subtitle (Optional)</label>
-                        <input
-                          type="text"
-                          value={brandForm.sub}
-                          onChange={(e) => setBrandForm({ ...brandForm, sub: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800"
-                          placeholder="e.g. Next-Gen Firewalls"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Brand Website Link (Optional)</label>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Brand Website Link</label>
                         <input
                           type="text"
                           value={brandForm.link}
@@ -4490,78 +4540,8 @@ export default function AdminPanel() {
                         />
                       </div>
 
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Logo Visual Keyword / Label (Optional)</label>
-                        <input
-                          type="text"
-                          value={brandForm.logoText}
-                          onChange={(e) => setBrandForm({ ...brandForm, logoText: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold"
-                          placeholder="e.g. CISCO or HIKVISION"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Logo Style Preset</label>
-                        <select
-                          value={brandForm.logoStyle}
-                          onChange={(e) => setBrandForm({ ...brandForm, logoStyle: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold"
-                        >
-                          <option value="standard">Standard Fallback Text Logo Style</option>
-                          <option disabled>--- Predefined Custom Brand Shapes ---</option>
-                          <option value="cisco">Cisco (Sky Wave Bars & Text)</option>
-                          <option value="dell">Dell (Blue Circle Rotated Label)</option>
-                          <option value="ruijie">Ruijie / Reyee (Red Block logo)</option>
-                          <option value="fortinet">Fortinet (Double Stack security text)</option>
-                          <option value="witek">WI-TEK (Cyan badge block)</option>
-                          <option value="rosenberger">Rosenberger (Gold Fibernet serif)</option>
-                          <option value="allied">Allied Telesis (Teal inline title)</option>
-                          <option value="vivanco">Vivanco (Germany Indigo block)</option>
-                          <option value="mikrotik">MikroTik (Double Red/Slate bars)</option>
-                          <option value="bdcom">BDCOM (GPON italicized sky logo)</option>
-                          <option value="netgear">NETGEAR (Heavy black uppercase)</option>
-                          <option value="grandstream">Grandstream (Dual stacked blue dots)</option>
-                          <option value="ubiquiti">Ubiquiti (Cyan concentric circles)</option>
-                          <option value="hikvision">Hikvision (Bold Red/Slate stack)</option>
-                          <option value="dahua">Dahua (Crimson technology inline)</option>
-                          <option value="tiandy">Tiandy (Green border with IP dot)</option>
-                          <option value="lenovo">Lenovo (Ruby rectangular container)</option>
-                          <option value="bosch">Bosch (PA Systems circle & center dot)</option>
-                          <option disabled>--- Dynamic Palette Fallbacks ---</option>
-                          <option value="sky">Deep Sky Blue Theme</option>
-                          <option value="blue">Royal Azure Blue Theme</option>
-                          <option value="red">Signal Red Theme</option>
-                          <option value="cyan">Vibrant Cyan Theme</option>
-                          <option value="amber">Warm Amber Orange Theme</option>
-                          <option value="teal">Pine Forest Teal Theme</option>
-                          <option value="indigo">Tech Indigo Purple Theme</option>
-                          <option value="slate">Slate Charcoal Minimalist Theme</option>
-                          <option value="emerald">Vibrant Emerald Green Theme</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Brand Card Border Accent</label>
-                        <select
-                          value={brandForm.color}
-                          onChange={(e) => setBrandForm({ ...brandForm, color: e.target.value })}
-                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800"
-                        >
-                          <option value="border-slate-200 hover:border-slate-500">Slate Grey Border Accent</option>
-                          <option value="border-sky-200 hover:border-sky-500">Sky Blue Border Accent</option>
-                          <option value="border-blue-200 hover:border-blue-500">Azure Blue Border Accent</option>
-                          <option value="border-red-200 hover:border-red-500">Crimson Red Border Accent</option>
-                          <option value="border-cyan-200 hover:border-cyan-500">Ocean Cyan Border Accent</option>
-                          <option value="border-amber-200 hover:border-amber-500">Saffron Gold Border Accent</option>
-                          <option value="border-teal-200 hover:border-teal-500">Forest Teal Border Accent</option>
-                          <option value="border-indigo-200 hover:border-indigo-500">Royal Indigo Border Accent</option>
-                          <option value="border-emerald-200 hover:border-emerald-500">Vibrant Green Border Accent</option>
-                        </select>
-                      </div>
-
                       {/* Image Upload for Brand */}
-                      <div className="md:col-span-2 bg-white border border-slate-200/80 p-4 rounded-xl flex flex-col sm:flex-row items-center gap-5 justify-between">
+                      <div className="bg-white border border-slate-200/80 p-4 rounded-xl flex flex-col sm:flex-row items-center gap-5 justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-16 h-16 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
                             {brandForm.logoUrl ? (
@@ -4571,9 +4551,9 @@ export default function AdminPanel() {
                             )}
                           </div>
                           <div>
-                            <span className="block text-slate-800 text-xs font-bold font-sans">Custom Brand Logo (Optional)</span>
+                            <span className="block text-slate-800 text-xs font-bold font-sans">Brand Logo Image</span>
                             <span className="block text-slate-400 text-[10px] font-semibold mt-0.5 max-w-sm">
-                              Upload a clean brand logo image with white/transparent background. Overrides custom vector icons when set. (Max size 2MB)
+                              Upload a clean brand logo image with white/transparent background. (Max size 2MB)
                             </span>
                           </div>
                         </div>
@@ -4881,8 +4861,7 @@ export default function AdminPanel() {
               </div>
             )}
 
-            {/* ====== TAB: TESTIMONIALS EDITOR ====== */}
-            {activeTab === "testimonials" && (
+                     {activeTab === "testimonials" && (
               <div className="space-y-6 animate-fade-in text-slate-800">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
@@ -5049,7 +5028,7 @@ export default function AdminPanel() {
                                 });
                                 setIsAddingTestimonial(false);
                               }}
-                              className="p-2 text-indigo-600 hover:bg-indigo-555 rounded-lg border border-slate-100 transition-all cursor-pointer"
+                              className="p-2 text-indigo-600 hover:bg-slate-100 rounded-lg border border-slate-100 transition-all cursor-pointer"
                               title="Edit Review"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
@@ -5058,6 +5037,300 @@ export default function AdminPanel() {
                               onClick={() => handleDeleteTestimonial(index)}
                               className="p-2 text-red-500 hover:bg-red-50/80 rounded-lg border border-slate-100 transition-all cursor-pointer"
                               title="Delete Review"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ====== TAB: FLOATING CHAT ICONS EDITOR ====== */}
+            {activeTab === "floating-chats" && (
+              <div className="space-y-6 animate-fade-in text-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-extrabold text-slate-800">Floating Chat Shortcuts</h2>
+                    <p className="text-slate-500 text-xs font-semibold mt-1">
+                      Manage dynamic brand icons shown as round click-to-chat widgets (WhatsApp, Messenger, Telegram etc.) at the bottom right corner of the website.
+                    </p>
+                  </div>
+                  {!isAddingFloatingChat && editingFloatingChatIndex === null && (
+                    <button
+                      onClick={() => {
+                        setIsAddingFloatingChat(true);
+                        setEditingFloatingChatIndex(null);
+                        setFloatingChatForm({
+                          platform: "WhatsApp",
+                          url: "https://wa.me/8809639992999",
+                          label: "Chat with Us",
+                          color: "bg-green-500 hover:bg-green-450",
+                          active: true,
+                          svgCode: DEFAULT_WHATSAPP_SVG
+                        });
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-555 text-white text-xs font-extrabold px-4.5 py-3 rounded-xl flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-indigo-600/15"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Floating Chat Icon</span>
+                    </button>
+                  )}
+                </div>
+
+                {saveFloatingChatSuccess && (
+                  <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl text-xs flex gap-2 items-center leading-relaxed font-sans shadow-sm">
+                    <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+                    <span>{saveFloatingChatSuccess}</span>
+                  </div>
+                )}
+
+                {/* FLOATING CHAT FORM PANEL */}
+                {(isAddingFloatingChat || editingFloatingChatIndex !== null) && (
+                  <form onSubmit={handleSaveFloatingChat} className="bg-slate-50 border border-slate-200/70 p-6 md:p-8 rounded-3xl space-y-5">
+                    <h3 className="font-extrabold text-slate-800 text-sm">
+                      {editingFloatingChatIndex !== null ? "Edit Chat Shortcut Settings" : "Deploy New Chat Shortcut Action"}
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-sans">
+                      <div>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Tooltip Label (Hover Description)</label>
+                        <input
+                          type="text"
+                          required
+                          value={floatingChatForm.label}
+                          onChange={(e) => setFloatingChatForm({ ...floatingChatForm, label: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                          placeholder="e.g. Chat on WhatsApp"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Widget Background Color Style</label>
+                        <select
+                          value={floatingChatForm.color && floatingChatForm.color.startsWith('#') ? "custom_hex" : floatingChatForm.color}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === "custom_hex") {
+                              setFloatingChatForm({ ...floatingChatForm, color: "#10b981" });
+                            } else {
+                              setFloatingChatForm({ ...floatingChatForm, color: val });
+                            }
+                          }}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        >
+                          <option value="bg-green-500 hover:bg-green-450">WhatsApp Green (bg-green-500)</option>
+                          <option value="bg-blue-600 hover:bg-blue-500">Messenger Blue (bg-blue-600)</option>
+                          <option value="bg-sky-500 hover:bg-sky-400">Telegram Sky (bg-sky-500)</option>
+                          <option value="bg-indigo-650 hover:bg-indigo-600">Indigo Action (bg-indigo-650)</option>
+                          <option value="bg-slate-700 hover:bg-slate-650">Slate Metal (bg-slate-700)</option>
+                          <option value="bg-purple-600 hover:bg-purple-500">Brilliant Purple (bg-purple-600)</option>
+                          <option value="custom_hex">Custom Hex Color (কাস্টম কালার)</option>
+                        </select>
+                      </div>
+
+                      {/* Custom Hex Color Picker */}
+                      {floatingChatForm.color && floatingChatForm.color.startsWith('#') && (
+                        <div className="animate-fade-in">
+                          <label className="block text-indigo-600 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">
+                            Pick Custom Hex Color (কাস্টম কালার)
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="color"
+                              value={floatingChatForm.color}
+                              onChange={(e) => setFloatingChatForm({ ...floatingChatForm, color: e.target.value })}
+                              className="w-12 h-10 border border-slate-200 rounded-xl p-1 cursor-pointer bg-white"
+                            />
+                            <input
+                              type="text"
+                              required
+                              value={floatingChatForm.color}
+                              onChange={(e) => setFloatingChatForm({ ...floatingChatForm, color: e.target.value })}
+                              className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                              placeholder="e.g. #10B981"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="md:col-span-2">
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">Target Action Link / URL</label>
+                        <input
+                          type="text"
+                          required
+                          value={floatingChatForm.url}
+                          onChange={(e) => setFloatingChatForm({ ...floatingChatForm, url: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                          placeholder="e.g. https://wa.me/8809639992999 or tel:+8809639992999"
+                        />
+                        <span className="text-slate-400 text-[10px] mt-1 block">
+                          Include complete prefixes: <strong>https://wa.me/[PhoneWithCountry]</strong>, <strong>https://m.me/[PageUsername]</strong>, <strong>tel:[PhoneNumber]</strong>, or <strong>mailto:[EmailAddress]</strong>.
+                        </span>
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <div className="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-white rounded-2xl p-6 text-center transition-all relative">
+                          <input
+                            type="file"
+                            accept=".svg"
+                            onChange={handleSvgUpload}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                          <Upload className="w-8 h-8 text-indigo-500 mx-auto mb-2" />
+                          <p className="text-slate-700 text-xs font-bold">Upload SVG Icon File (এসভিজি আইকন ফাইল আপলোড)</p>
+                          <p className="text-slate-400 text-[11px] mt-1">Drag and drop or click to upload your custom `.svg` asset</p>
+                        </div>
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-slate-500 text-[10.5px] uppercase font-extrabold tracking-wider mb-1.5 font-sans">
+                          Raw SVG Code Mark-up (এসভিজি কোড প্রিভিউ ও এডিট)
+                        </label>
+                        <textarea
+                          rows={4}
+                          value={floatingChatForm.svgCode || ""}
+                          onChange={(e) => setFloatingChatForm({ ...floatingChatForm, svgCode: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-[11px] font-mono focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                          placeholder='<svg viewBox="0 0 24 24" fill="currentColor">...</svg>'
+                          required
+                        />
+                        <span className="text-slate-400 text-[10px] mt-1 block">
+                          You can paste your custom SVG XML tags here directly. Ensure there are active SVG path elements inside.
+                        </span>
+                      </div>
+
+                      {/* Live Preview representation */}
+                      {floatingChatForm.svgCode && (
+                        <div className="md:col-span-2 bg-indigo-50/50 rounded-2xl p-4 border border-indigo-100 flex items-center justify-between gap-4 font-sans">
+                          <div>
+                            <p className="text-indigo-950 text-xs font-bold">Live Icon View (লাইভ আইকন প্রিভিউ)</p>
+                            <p className="text-slate-500 text-[10.5px] mt-1">Verify if the custom SVG renders correctly inside the round widget container.</p>
+                          </div>
+                          <div 
+                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 ${
+                              floatingChatForm.color && !floatingChatForm.color.startsWith('#') ? floatingChatForm.color : (!floatingChatForm.color ? "bg-indigo-600" : "")
+                            }`}
+                            style={floatingChatForm.color && floatingChatForm.color.startsWith('#') ? { backgroundColor: floatingChatForm.color } : undefined}
+                          >
+                            <span 
+                              className="w-6 h-6 flex items-center justify-center [&>svg]:w-6 [&>svg]:h-6 [&>svg]:block"
+                              dangerouslySetInnerHTML={{ __html: floatingChatForm.svgCode }} 
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-2 pt-4">
+                        <input
+                          type="checkbox"
+                          id="fc-active-checkbox"
+                          checked={floatingChatForm.active}
+                          onChange={(e) => setFloatingChatForm({ ...floatingChatForm, active: e.target.checked })}
+                          className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+                        />
+                        <label htmlFor="fc-active-checkbox" className="text-slate-700 text-xs font-bold select-none cursor-pointer">
+                          Activate Link & Display floating widget right away
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200/50">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddingFloatingChat(false);
+                          setEditingFloatingChatIndex(null);
+                        }}
+                        className="bg-slate-200 hover:bg-slate-150 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="bg-indigo-600 hover:bg-indigo-550 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/10"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        <span>Save Chat Shortcut</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* ACTIVE FLOATING LINKS LIST */}
+                <div className="space-y-4 font-sans">
+                  <h3 className="font-extrabold text-slate-700 text-xs uppercase tracking-wider">Configured Chat Widgets ({floatingChats.length})</h3>
+
+                  {floatingChats.length === 0 ? (
+                    <div className="border border-dashed border-slate-200 p-8 text-center rounded-3xl bg-slate-50/50">
+                      <p className="text-slate-400 text-xs font-medium">No floating chat icons found. Add a WhatsApp, Messenger, or dial shortcut to show up in the lower corner of pages!</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-4">
+                      {floatingChats.map((chat, idx) => (
+                        <div key={chat.id || idx} className="border border-slate-150 p-4 rounded-2xl flex items-center justify-between bg-white shadow-sm hover:border-slate-300 transition-all">
+                          <div className="flex items-center gap-3.5 min-w-0">
+                            {/* Round Preview Container mimicking actual floating widget layout */}
+                            <div 
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold shadow-sm ${
+                                chat.color && !chat.color.startsWith('#') ? chat.color : ""
+                              }`}
+                              style={chat.color && chat.color.startsWith('#') ? { backgroundColor: chat.color } : undefined}
+                            >
+                              {chat.svgCode ? (
+                                <span 
+                                  className="w-5.5 h-5.5 flex items-center justify-center [&>svg]:w-5.5 [&>svg]:h-5.5 [&>svg]:block"
+                                  dangerouslySetInnerHTML={{ __html: chat.svgCode }}
+                                />
+                              ) : chat.platform.toLowerCase() === "whatsapp" ? (
+                                <MessageCircle className="w-5 h-5 fill-white" />
+                              ) : (
+                                <MessageSquare className="w-5.5 h-5.5 fill-white" />
+                              )}
+                            </div>
+
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-extrabold text-slate-900 text-xs leading-none">{chat.label || chat.platform}</h4>
+                                <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase leading-none ${
+                                  chat.active ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-500"
+                                }`}>
+                                  {chat.active ? "ACTIVE" : "DISABLED"}
+                                </span>
+                              </div>
+                              <p className="text-slate-400 text-[10.5px] mt-1 hover:underline truncate max-w-sm sm:max-w-md">{chat.url}</p>
+                              <p className="text-indigo-600 text-[9px] font-bold uppercase tracking-wider mt-0.5">Platform Setup: Custom SVG Widget</p>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingFloatingChatIndex(idx);
+                                setFloatingChatForm({
+                                  platform: chat.platform || "Custom SVG",
+                                  url: chat.url,
+                                  label: chat.label,
+                                  color: chat.color || "bg-indigo-600 hover:bg-indigo-500",
+                                  active: chat.active,
+                                  svgCode: chat.svgCode || ""
+                                });
+                                setIsAddingFloatingChat(false);
+                              }}
+                              className="p-2 text-indigo-600 hover:bg-slate-100 rounded-lg border border-slate-100 transition-all cursor-pointer"
+                              title="Edit settings"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteFloatingChat(idx)}
+                              className="p-2 text-red-500 hover:bg-red-50/80 rounded-lg border border-slate-100 transition-all cursor-pointer"
+                              title="Delete shortcut"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>

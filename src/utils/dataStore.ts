@@ -188,6 +188,16 @@ export interface SocialLink {
   url: string;
 }
 
+export interface FloatingChat {
+  id: string;
+  platform: string; // e.g. "WhatsApp", "Messenger", "Telegram", "Phone", "Email", "Custom"
+  url: string;
+  label: string;
+  color?: string; // e.g. "bg-green-500 hover:bg-green-400"
+  active: boolean;
+  svgCode?: string; // Raw custom SVG icon string
+}
+
 export interface QuickLink {
   id: string;
   labelText: string;
@@ -536,7 +546,7 @@ const defaultHeaderMenuItems: NavItemConfig[] = [
       }
     ]
   },
-  { id: "5", name: "Our Clients", href: "#clients" },
+  { id: "5", name: "Our Clients", href: "/clients" },
   {
     id: "6",
     name: "Gallery",
@@ -582,7 +592,7 @@ const defaultFooterConfig: FooterConfig = {
     { id: "qk-2", labelText: "CSR Initiatives", url: "#csr" },
     { id: "qk-3", labelText: "Career Opportunities", url: "#career" },
     { id: "qk-4", labelText: "Our Brands", url: "#brands" },
-    { id: "qk-5", labelText: "Our Clients", url: "#clients" }
+    { id: "qk-5", labelText: "Our Clients", url: "/clients" }
   ]
 };
 
@@ -696,6 +706,27 @@ const defaultTestimonials: TestimonialItem[] = [
     author: "Engr. Kamal Hossain",
     role: "Operations Chief, Farazy Hospital Group",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+  }
+];
+
+const defaultFloatingChats: FloatingChat[] = [
+  {
+    id: "fc-1",
+    platform: "Messenger",
+    url: "https://m.me/genzesports",
+    label: "Messenger Chat",
+    color: "bg-blue-600 hover:bg-blue-500",
+    active: true,
+    svgCode: `<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12 2C6.48 2 2 6.14 2 11.26c0 2.91 1.45 5.51 3.7 7.15c.18.13.29.35.29.58l-.04 1.83c-.02.66.66 1.12 1.25.82l2.05-1.04a.8.8 0 01.62-.05c.67.18 1.38.27 2.13.27c5.52 0 10-4.14 10-9.26S17.52 2 12 2zm1.1 12.39l-2.5-2.67-4.89 2.67 5.37-5.7 2.5 2.67 4.89-2.67-5.37 5.7z"/></svg>`
+  },
+  {
+    id: "fc-2",
+    platform: "WhatsApp",
+    url: "https://wa.me/8809639992999",
+    label: "WhatsApp Chat",
+    color: "bg-green-500 hover:bg-green-450",
+    active: true,
+    svgCode: `<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.705 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`
   }
 ];
 
@@ -1199,6 +1230,9 @@ export const dataStore = {
   getDisplayStats: (): StatItem[] => getStored("ctl_display_stats", defaultDisplayStats),
   saveDisplayStats: (list: StatItem[]) => setStored("ctl_display_stats", list),
 
+  getFloatingChats: (): FloatingChat[] => getStored("ctl_floating_chats", defaultFloatingChats),
+  saveFloatingChats: (list: FloatingChat[]) => setStored("ctl_floating_chats", list),
+
   getAdminAuthConfig: (): AdminAuthConfig => {
     const stored = getStored("ctl_admin_auth_config", defaultAdminAuthConfig);
     return {
@@ -1342,7 +1376,8 @@ export const dataStore = {
       ctl_footer_config: dataStore.getFooterConfig(),
       ctl_site_metadata: dataStore.getSiteMetadata(),
       ctl_admin_auth_config: dataStore.getAdminAuthConfig(),
-      ctl_email_integration_config: dataStore.getEmailIntegrationConfig()
+      ctl_email_integration_config: dataStore.getEmailIntegrationConfig(),
+      ctl_floating_chats: dataStore.getFloatingChats()
     };
     return JSON.stringify(bundle, null, 2);
   },

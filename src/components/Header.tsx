@@ -74,6 +74,17 @@ export default function Header() {
 
   const menuItems = header.menuItems || [];
 
+  const handlePageNavigationClick = (href: string, e: React.MouseEvent) => {
+    if (href.startsWith("/")) {
+      e.preventDefault();
+      setIsOpen(false);
+      window.history.pushState(null, "", href);
+      window.dispatchEvent(new Event("popstate"));
+      return true;
+    }
+    return false;
+  };
+
   const handleScrollTo = (id: string) => {
     setIsOpen(false);
     const element = document.getElementById(id);
@@ -112,6 +123,7 @@ export default function Header() {
               <a
                 href={item.href}
                 onClick={(e) => {
+                  if (handlePageNavigationClick(item.href, e)) return;
                   setIsOpen(false);
                   const id = item.href.replace("#", "");
                   
@@ -130,7 +142,7 @@ export default function Header() {
                     window.location.hash = item.href;
                   }
                 }}
-                className="flex items-center gap-1 px-3 py-2 text-slate-700 font-medium text-xs hover:text-indigo-700 transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-3 py-2 text-slate-700 font-medium text-base hover:text-indigo-700 transition-colors cursor-pointer"
               >
                 {item.name}
                 {item.hasDropdown && <ChevronDown className="w-3 h-3 text-slate-400" />}
@@ -146,6 +158,7 @@ export default function Header() {
                             <a 
                               href={subItem.href} 
                               onClick={(e) => { 
+                                if (handlePageNavigationClick(subItem.href, e)) return;
                                 setIsOpen(false); 
                                 const subId = subItem.href.replace("#", "");
                                 const isPageRoute = isSubpageId(subId);
@@ -162,7 +175,7 @@ export default function Header() {
                                   window.location.hash = subItem.href;
                                 }
                               }} 
-                              className="flex-1 text-left px-4 py-2.5 text-[11px] sm:text-xs text-slate-700 hover:text-indigo-600 font-semibold flex items-center justify-between"
+                              className="flex-1 text-left px-4 py-2.5 text-base text-slate-700 hover:text-indigo-600 font-semibold flex items-center justify-between"
                             >
                               <span>{subItem.name}</span>
                               <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-400 group-hover/sub:text-indigo-600 transition-colors" />
@@ -176,6 +189,7 @@ export default function Header() {
                                 key={nestedItem.name}
                                 href={nestedItem.href}
                                 onClick={(e) => {
+                                  if (handlePageNavigationClick(nestedItem.href, e)) return;
                                   setIsOpen(false);
                                   const nestedId = nestedItem.href.replace("#", "");
                                   const isPageRoute = isSubpageId(nestedId);
@@ -192,7 +206,7 @@ export default function Header() {
                                     window.location.hash = nestedItem.href;
                                   }
                                 }}
-                                className="block px-4 py-2 text-[11px] text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium"
+                                className="block px-4 py-2 text-base text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium"
                               >
                                 {nestedItem.name}
                               </a>
@@ -203,6 +217,7 @@ export default function Header() {
                         <a 
                           href={subItem.href} 
                           onClick={(e) => { 
+                            if (handlePageNavigationClick(subItem.href, e)) return;
                             setIsOpen(false); 
                             const subId = subItem.href.replace("#", "");
                             const isPageRoute = isSubpageId(subId);
@@ -219,7 +234,7 @@ export default function Header() {
                               window.location.hash = subItem.href;
                             }
                           }} 
-                          className="block px-4 py-2.5 text-[11px] sm:text-xs text-slate-700 hover:bg-slate-50 hover:text-indigo-600 font-semibold"
+                          className="block px-4 py-2.5 text-base text-slate-700 hover:bg-slate-50 hover:text-indigo-600 font-semibold"
                         >
                           {subItem.name}
                         </a>
@@ -237,7 +252,7 @@ export default function Header() {
               href={btn.url} 
               target={btn.isOpenNewTab ? "_blank" : "_self"} 
               rel="noopener noreferrer"
-              className="ml-3 px-4 py-2 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-full hover:bg-indigo-100 transition-all border border-indigo-200/50 block text-center"
+              className="ml-3 px-4 py-2 bg-indigo-50 text-indigo-700 font-bold text-base rounded-full hover:bg-indigo-100 transition-all border border-indigo-200/50 block text-center"
             >
               {btn.labelText}
             </a>
@@ -306,7 +321,7 @@ export default function Header() {
                     {item.hasDropdown && item.dropdownItems && item.dropdownItems.length > 0 ? (
                       <button
                         onClick={() => toggleMenu(item.name)}
-                        className="w-full flex items-center justify-between py-3 px-4 text-left font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all cursor-pointer text-xs sm:text-sm tracking-wide"
+                        className="w-full flex items-center justify-between py-3 px-4 text-left font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all cursor-pointer text-base tracking-wide"
                       >
                         <span className="tracking-tight uppercase">{item.name}</span>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
@@ -315,6 +330,7 @@ export default function Header() {
                       <a
                         href={item.href}
                         onClick={(e) => {
+                          if (handlePageNavigationClick(item.href, e)) return;
                           const id = item.href.replace("#", "");
                           const isPageRoute = isSubpageId(id);
                           const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
@@ -332,7 +348,7 @@ export default function Header() {
                             window.location.hash = item.href;
                           }
                         }}
-                        className="block py-3 px-4 font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all text-xs sm:text-sm tracking-wide"
+                        className="block py-3 px-4 font-extrabold text-[#f3f4f6] hover:text-white hover:bg-white/5 rounded-xl transition-all text-base tracking-wide"
                       >
                         <span className="tracking-tight uppercase">{item.name}</span>
                       </a>
@@ -350,7 +366,7 @@ export default function Header() {
                                   {/* Submenu Trigger (Closed by default, click opens it) */}
                                   <button
                                     onClick={() => toggleSubmenu(subItem.name)}
-                                    className="w-full flex items-center justify-between px-4 py-2.5 text-xs text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all cursor-pointer font-bold"
+                                    className="w-full flex items-center justify-between px-4 py-2.5 text-base text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all cursor-pointer font-bold"
                                   >
                                     <span>• {subItem.name}</span>
                                     <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-300 ${isSubExpanded ? "rotate-180" : ""}`} />
@@ -364,6 +380,7 @@ export default function Header() {
                                           key={nestedItem.name}
                                           href={nestedItem.href}
                                           onClick={(e) => {
+                                            if (handlePageNavigationClick(nestedItem.href, e)) return;
                                             const nestedId = nestedItem.href.replace("#", "");
                                             const isPageRoute = isSubpageId(nestedId);
                                             const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
@@ -381,7 +398,7 @@ export default function Header() {
                                               window.location.hash = nestedItem.href;
                                             }
                                           }}
-                                          className="block px-4 py-1.5 text-[11px] text-slate-300 hover:text-white hover:bg-white/5 rounded transition-all font-semibold"
+                                          className="block px-4 py-1.5 text-base text-slate-300 hover:text-white hover:bg-white/5 rounded transition-all font-semibold"
                                         >
                                           — {nestedItem.name}
                                         </a>
@@ -393,6 +410,7 @@ export default function Header() {
                                 <a
                                   href={subItem.href}
                                   onClick={(e) => {
+                                    if (handlePageNavigationClick(subItem.href, e)) return;
                                     const subId = subItem.href.replace("#", "");
                                     const isPageRoute = isSubpageId(subId);
                                     const wasPageRoute = isSubpageId(window.location.hash.replace("#", ""));
@@ -410,7 +428,7 @@ export default function Header() {
                                       window.location.hash = subItem.href;
                                     }
                                   }}
-                                  className="block px-4 py-2.5 text-xs text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all font-bold"
+                                  className="block px-4 py-2.5 text-base text-[#d1d5db] hover:text-white hover:bg-white/5 rounded-lg transition-all font-bold"
                                 >
                                   • {subItem.name}
                                 </a>
@@ -432,7 +450,7 @@ export default function Header() {
                     target={btn.isOpenNewTab ? "_blank" : "_self"}
                     rel="noopener noreferrer"
                     onClick={closeDrawer}
-                    className="w-full flex items-center justify-center gap-2.5 py-3.5 px-5 bg-gradient-to-r from-red-650 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm tracking-widest uppercase rounded-2xl shadow-lg border border-white/10 transition-all duration-300 transform active:scale-95 text-center"
+                    className="w-full flex items-center justify-center gap-2.5 py-3.5 px-5 bg-gradient-to-r from-red-650 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold text-base tracking-widest uppercase rounded-2xl shadow-lg border border-white/10 transition-all duration-300 transform active:scale-95 text-center"
                   >
                     <span>{btn.labelText}</span>
                   </a>

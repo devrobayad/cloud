@@ -61,7 +61,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
   // Custom logo or Fallback Initials
   const HeaderConfig = dataStore.getHeaderConfig();
-  const fallbackLogoText = HeaderConfig.logoText || "CTL";
+  const logoToShow = customLogo || HeaderConfig.logoUrl;
 
   return (
     <div className="fixed inset-0 z-[10000] bg-slate-900 flex flex-col items-center justify-center text-white select-none transition-all duration-500 ease-in-out">
@@ -74,27 +74,20 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       <div className="relative z-10 flex flex-col items-center justify-center max-w-sm w-full text-center px-6 space-y-6">
         
         {/* Logo container */}
-        <div className="relative flex items-center justify-center w-24 h-24 mb-2">
-          {customLogo ? (
+        {logoToShow ? (
+          <div className="relative flex items-center justify-center w-24 h-24 mb-2">
             <img 
               referrerPolicy="no-referrer"
-              src={customLogo} 
+              src={logoToShow} 
               alt="Preloader Logo" 
               className={`w-20 h-20 object-contain rounded-xl ${
                 preset === "pulse" ? "animate-pulse" : ""
               }`}
             />
-          ) : (
-            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center font-sans font-black text-xl tracking-tight shadow-lg shadow-indigo-500/20 ${
-              preset === "pulse" ? "animate-pulse" : ""
-            }`}>
-              {fallbackLogoText}
-            </div>
-          )}
-
-          {/* Premium Glowing Effect overlay */}
-          <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-xl animate-pulse" />
-        </div>
+            {/* Premium Glowing Effect overlay */}
+            <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-xl animate-pulse" />
+          </div>
+        ) : null}
 
         {/* Dynamic Preloader Animations */}
         <div className="flex items-center justify-center h-16">
