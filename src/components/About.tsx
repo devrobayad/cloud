@@ -50,7 +50,7 @@ export default function About() {
           {/* DESKTOP VIEW ONLY (perfect alignment as before, completely restored) */}
           <div 
             style={{ marginBottom: "0px" }}
-            className="hidden lg:col-span-5 lg:relative lg:flex lg:justify-start lg:py-0 lg:mb-0 z-10"
+            className="hidden lg:col-span-6 lg:relative lg:flex lg:justify-start lg:py-0 lg:mb-0 z-10"
           >
             <ScrollReveal direction="right" duration={0.8}>
               {/* Dots Pattern Accent */}
@@ -58,7 +58,7 @@ export default function About() {
               
               {/* Base Image (Installer / Camera Technician) with rich shadow and NO border */}
               <div 
-                style={{ width: "326px" }}
+                style={{ width: "400px" }}
                 className="relative h-88 sm:h-96 rounded-[32px] overflow-hidden shadow-[0_25px_60px_-15px_rgba(15,23,42,0.15)] border-none transform hover:scale-[1.01] transition-all duration-500 z-10"
               >
                 <img
@@ -120,7 +120,7 @@ export default function About() {
           </div>
 
           {/* Right Side: High-End Structured Typography Content */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
+          <div className="lg:col-span-6 flex flex-col gap-6">
             <ScrollReveal direction="left" duration={0.8} delay={0.1}>
               {/* Section Tagline */}
               <div className="flex items-center gap-2.5 mb-3">

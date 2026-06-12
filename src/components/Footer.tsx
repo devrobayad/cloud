@@ -126,7 +126,7 @@ export default function Footer() {
   };
 
   return (
-    <footer id="footer" className="bg-[#0b0c16] text-[#9ca3af] relative border-t border-slate-900">
+    <footer id="footer" className="bg-[#2E6FA8] text-white/90 relative border-t border-indigo-400/20">
       
       {/* Footer Top widget area */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
@@ -138,19 +138,19 @@ export default function Footer() {
               {footer.logoUrl ? (
                 <img src={footer.logoUrl} alt={header.logoText} className="h-10 w-auto object-contain rounded-lg" referrerPolicy="no-referrer" />
               ) : (
-                <div className="bg-indigo-600 text-white p-2.5 rounded-xl font-bold text-sm tracking-widest">{header.logoText}</div>
+                <div className="bg-[#243D7A] text-white p-2.5 rounded-xl font-bold text-sm tracking-widest">{header.logoText}</div>
               )}
               <div className="flex flex-col">
                 <span className="text-white font-extrabold text-sm tracking-wider leading-none">
                   {header.companyNameRow1}
                 </span>
-                <span className="text-indigo-400 text-[9px] font-bold tracking-widest uppercase mt-0.5">
+                <span className="text-blue-100 text-[9px] font-bold tracking-widest uppercase mt-0.5">
                   {header.companyNameRow2}
                 </span>
               </div>
             </div>
             
-            <p className="text-slate-400 text-[13.5px] leading-relaxed max-w-sm">
+            <p className="text-blue-50 text-[13.5px] leading-relaxed max-w-sm">
               {footer.aboutText}
             </p>
             
@@ -162,7 +162,7 @@ export default function Footer() {
                   href={soc.url} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-9 h-9 rounded-full border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 flex items-center justify-center transition-all bg-slate-900/40"
+                  className="w-9 h-9 rounded-full border border-white/20 hover:border-white text-white/90 hover:text-white flex items-center justify-center transition-all bg-white/10 hover:bg-white/20"
                   title={soc.platform}
                 >
                   {getSocialIcon(soc.platform)}
@@ -175,9 +175,9 @@ export default function Footer() {
           <div className="lg:col-span-3 lg:pl-8 flex flex-col gap-4">
             <h3 className="text-white font-extrabold text-sm uppercase tracking-wider relative pb-2 select-none">
               Quick Links
-              <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-indigo-500" />
+              <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-white" />
             </h3>
-            <ul className="flex flex-col gap-2.5 text-[13px]">
+            <ul className="flex flex-col gap-2.5 text-[13px] text-blue-50">
               {quickLinksToRender.map((link) => (
                 <li key={link.id}>
                   <button 
@@ -195,36 +195,36 @@ export default function Footer() {
           <div className="lg:col-span-4 flex flex-col gap-4">
             <h3 className="text-white font-extrabold text-sm uppercase tracking-wider relative pb-2 select-none">
               Contact Us
-              <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-indigo-500" />
+              <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-white" />
             </h3>
-            <ul className="flex flex-col gap-3.5 text-[13.5px]">
+            <ul className="flex flex-col gap-3.5 text-[13.5px] text-blue-50">
               <li className="flex items-start gap-3">
-                <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 text-indigo-400 mt-0.5">
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10 text-white mt-0.5">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] uppercase font-bold tracking-wider text-slate-500">Corporate Office</span>
-                  <span className="text-slate-300">{contact.addressBrief}</span>
+                  <span className="text-[11px] uppercase font-bold tracking-wider text-blue-105">Corporate Office</span>
+                  <span className="text-white font-medium">{contact.addressBrief}</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 text-indigo-400 mt-0.5">
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10 text-white mt-0.5">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] uppercase font-bold tracking-wider text-slate-500">Call Us Anytime</span>
-                  <a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="text-slate-200 hover:text-white transition-colors">
+                  <span className="text-[11px] uppercase font-bold tracking-wider text-blue-105">Call Us Anytime</span>
+                  <a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="text-white hover:underline transition-all font-medium">
                     {contact.phone}
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 text-indigo-400 mt-0.5">
+                <div className="bg-white/10 p-2 rounded-lg border border-white/10 text-white mt-0.5">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] uppercase font-bold tracking-wider text-slate-500">Email Address</span>
-                  <a href={`mailto:${contact.email}`} className="text-slate-200 hover:text-white transition-colors">
+                  <span className="text-[11px] uppercase font-bold tracking-wider text-blue-105">Email Address</span>
+                  <a href={`mailto:${contact.email}`} className="text-white hover:underline transition-all font-medium">
                     {contact.email}
                   </a>
                 </div>
@@ -274,14 +274,14 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar: Copyright line with proper spacing */}
-      <div className="border-t border-slate-900 bg-[#07080f] py-6 text-center select-none text-[11.5px] text-slate-500">
+      <div className="border-t border-white/10 bg-[#243D7A] py-6 text-center select-none text-[11.5px] text-white/80">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2.5">
           <span>{footer.copyrightText}</span>
-          <div className="flex items-center gap-4 text-slate-600">
+          <div className="flex items-center gap-4 text-white/70">
             <a 
               href="/privacy-policy" 
               onClick={(e) => handleQuickLinkClick("/privacy-policy", e)} 
-              className="hover:text-indigo-400 transition-colors"
+              className="hover:text-white hover:underline transition-colors"
             >
               Privacy Policy
             </a>
@@ -289,7 +289,7 @@ export default function Footer() {
             <a 
               href="/terms-of-use" 
               onClick={(e) => handleQuickLinkClick("/terms-of-use", e)} 
-              className="hover:text-indigo-400 transition-colors"
+              className="hover:text-white hover:underline transition-colors"
             >
               Terms of Use
             </a>

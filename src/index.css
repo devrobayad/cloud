@@ -111,7 +111,7 @@ div[class*="bg-[#243D7A]"] nav button * {
   div[class*="bg-[#243D7A]"] nav button,
   div[class*="bg-[#243D7A]"] nav a *,
   div[class*="bg-[#243D7A]"] nav button * {
-    font-size: 13.5px !important;
+    font-size: 16px !important;
   }
   header nav a {
     padding-left: 6px !important;
@@ -160,6 +160,15 @@ div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-
 /* Explicit margin override for the selected second about section image collage */
 div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) {
   margin-right: 80px !important;
+}
+
+/* Width overrides for the selected elements in focus mode */
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(4) {
+  width: 600px !important;
+}
+
+div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(4) > button:nth-of-type(1) {
+  width: 200px !important;
 }
 
 
