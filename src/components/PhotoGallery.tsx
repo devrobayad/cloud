@@ -193,7 +193,7 @@ export default function PhotoGallery() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-4 py-2 rounded-xl text-xs font-bold tracking-tight transition-all cursor-pointer ${
                     selectedCategory === cat.id
-                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                      ? "bg-[#2E6FA8] text-white shadow-md shadow-indigo-600/20"
                       : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >

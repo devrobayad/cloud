@@ -115,24 +115,22 @@ export default function Hero() {
                 >
                   {slides[current].cta && (
                     <a 
-                      href="/contact"
+                      href="#contact"
                       onClick={(e) => {
                         e.preventDefault();
-                        window.history.pushState(null, "", "/contact");
-                        window.dispatchEvent(new Event("popstate"));
+                        window.location.hash = "#contact";
                       }}
-                      className="px-5 py-2.5 lg:px-6 lg:py-3.5 bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-95 text-xs lg:text-sm text-white font-bold rounded-full transition-all shadow-xl shadow-indigo-700/20 cursor-pointer"
+                      className="px-5 py-2.5 lg:px-6 lg:py-3.5 bg-[#2E6FA8] hover:bg-[#243D7A] hover:scale-105 active:scale-95 text-xs lg:text-sm text-white font-bold rounded-full transition-all shadow-xl shadow-indigo-700/20 cursor-pointer"
                     >
                       {slides[current].cta}
                     </a>
                   )}
                   {slides[current].title && (
                     <a 
-                      href="/solutions"
+                      href="#home"
                       onClick={(e) => {
                         e.preventDefault();
-                        window.history.pushState(null, "", "/home");
-                        window.dispatchEvent(new Event("popstate"));
+                        window.location.hash = "#home";
                         // Wait a fraction of a second and scroll to solutions segment if present
                         setTimeout(() => {
                           const element = document.getElementById("solutions");

@@ -74,10 +74,9 @@ export default function Clients() {
           <ScrollReveal direction="up" duration={0.6} delay={0.1}>
             <button
               onClick={() => {
-                window.history.pushState(null, "", "/clients");
-                window.dispatchEvent(new Event("popstate"));
+                window.location.hash = "#clients";
               }}
-              className="px-6 py-3 bg-[#4F46E5] hover:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2"
+              className="px-6 py-3 bg-[#2E6FA8] hover:bg-[#243D7A] text-white text-xs font-bold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2"
             >
               See All Clients
             </button>

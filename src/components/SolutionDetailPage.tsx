@@ -1978,7 +1978,7 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="w-full mt-2 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all shadow-md shadow-indigo-600/10 flex items-center justify-center gap-1.5 disabled:opacity-75"
+            className="w-full mt-2 py-2.5 bg-[#2E6FA8] hover:bg-[#243D7A] text-white font-bold rounded-xl text-xs transition-all shadow-md shadow-indigo-600/10 flex items-center justify-center gap-1.5 disabled:opacity-75"
           >
             {isSubmitting ? (
               <>
@@ -1999,31 +1999,31 @@ export default function SolutionDetailPage({ solutionId }: SolutionDetailPagePro
 
   // 3. Help Contact Card
   const renderContactSales = () => (
-    <div id="contact-sales-block" className="bg-[#131138] rounded-3xl p-6 text-white text-xs shadow-md flex flex-col gap-4 border border-slate-800">
-      <h3 className="font-extrabold text-sm tracking-wider uppercase border-b border-slate-800 pb-3 flex items-center gap-2">
-        <HelpCircle className="w-4 h-4 text-indigo-400" />
+    <div id="contact-sales-block" className="bg-[#2E6FA8] rounded-3xl p-6 text-white text-xs shadow-md flex flex-col gap-4 border border-indigo-400/20">
+      <h3 className="font-extrabold text-sm tracking-wider uppercase border-b border-white/20 pb-3 flex items-center gap-2">
+        <HelpCircle className="w-4 h-4 text-white" />
         Contact Sales
       </h3>
       
-      <div className="flex flex-col gap-3 font-sans font-medium text-slate-300">
+      <div className="flex flex-col gap-3 font-sans font-medium text-slate-100">
         <div className="flex items-start gap-2.5">
-          <Phone className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
+          <Phone className="w-4 h-4 text-white flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-extrabold text-white text-[11px] uppercase tracking-wider mb-0.5">Direct Hotline</p>
-            <p><a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="hover:text-indigo-300 transition-colors">{contact.phone}</a></p>
+            <p><a href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`} className="hover:text-slate-200 transition-colors font-bold">{contact.phone}</a></p>
           </div>
         </div>
 
         <div className="flex items-start gap-2.5">
-          <Mail className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
+          <Mail className="w-4 h-4 text-white flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-extrabold text-white text-[11px] uppercase tracking-wider mb-0.5">Corporate Email</p>
-            <p className="hover:text-indigo-300 pointer-events-auto"><a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+            <p className="hover:text-slate-200 pointer-events-auto font-bold"><a href={`mailto:${contact.email}`}>{contact.email}</a></p>
           </div>
         </div>
 
         <div className="flex items-start gap-2.5">
-          <MapPin className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
+          <MapPin className="w-4 h-4 text-white flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-extrabold text-white text-[11px] uppercase tracking-wider mb-0.5">Registered Office</p>
             <p className="leading-normal">{contact.address}</p>

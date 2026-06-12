@@ -78,8 +78,7 @@ export default function Header() {
     if (href.startsWith("/")) {
       e.preventDefault();
       setIsOpen(false);
-      window.history.pushState(null, "", href);
-      window.dispatchEvent(new Event("popstate"));
+      window.location.hash = "#" + href.replace(/^\//, "");
       return true;
     }
     return false;
@@ -100,8 +99,7 @@ export default function Header() {
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => { 
           setIsOpen(false); 
-          window.history.pushState(null, "", "/home");
-          window.dispatchEvent(new Event("popstate"));
+          window.location.hash = "#home";
         }}>
           {header.logoUrl ? (
             <img src={header.logoUrl} alt={header.logoText} className="h-10 w-auto object-contain rounded-lg" referrerPolicy="no-referrer" />
@@ -121,7 +119,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Menu */}
-        <nav className="hidden xl:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1.5 flex-nowrap">
           {menuItems.map((item) => (
             <div key={item.name} className="relative group">
               <a
@@ -146,7 +144,7 @@ export default function Header() {
                     window.location.hash = item.href;
                   }
                 }}
-                className="flex items-center gap-1 px-3 py-2 text-slate-700 font-medium text-base hover:text-indigo-700 transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-2 py-2 2xl:px-3 text-slate-700 font-normal text-[16px] hover:text-indigo-700 transition-colors cursor-pointer whitespace-nowrap"
               >
                 {item.name}
                 {item.hasDropdown && <ChevronDown className="w-3 h-3 text-slate-400" />}
@@ -179,7 +177,7 @@ export default function Header() {
                                   window.location.hash = subItem.href;
                                 }
                               }} 
-                              className="flex-1 text-left px-4 py-2.5 text-base text-slate-700 hover:text-indigo-600 font-semibold flex items-center justify-between"
+                              className="flex-1 text-left px-4 py-2.5 text-[16px] text-slate-700 hover:text-indigo-600 font-normal flex items-center justify-between"
                             >
                               <span>{subItem.name}</span>
                               <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-400 group-hover/sub:text-indigo-600 transition-colors" />
@@ -210,7 +208,7 @@ export default function Header() {
                                     window.location.hash = nestedItem.href;
                                   }
                                 }}
-                                className="block px-4 py-2 text-base text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium"
+                                className="block px-4 py-2 text-[16px] text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-normal"
                               >
                                 {nestedItem.name}
                               </a>
@@ -238,7 +236,7 @@ export default function Header() {
                               window.location.hash = subItem.href;
                             }
                           }} 
-                          className="block px-4 py-2.5 text-base text-slate-700 hover:bg-slate-50 hover:text-indigo-600 font-semibold"
+                          className="block px-4 py-2.5 text-[16px] text-slate-700 hover:bg-slate-50 hover:text-indigo-600 font-normal"
                         >
                           {subItem.name}
                         </a>
@@ -256,7 +254,7 @@ export default function Header() {
               href={btn.url} 
               target={btn.isOpenNewTab ? "_blank" : "_self"} 
               rel="noopener noreferrer"
-              className="ml-3 px-4 py-2 bg-indigo-50 text-indigo-700 font-bold text-base rounded-full hover:bg-indigo-100 transition-all border border-indigo-200/50 block text-center"
+              className="ml-2.5 px-3.5 py-1.5 bg-[#2E6FA8] text-white font-normal text-[16px] rounded-full hover:bg-[#243D7A] transition-all border border-transparent block text-center whitespace-nowrap"
             >
               {btn.labelText}
             </a>
@@ -276,7 +274,7 @@ export default function Header() {
 
       {/* Mobile Drawer - Immersive same-to-same design with the header photo */}
       {isOpen && (
-        <div className="fixed inset-0 z-[100] bg-[#243D7A] xl:hidden flex flex-col overflow-hidden animate-in fade-in slide-in-from-top duration-300">
+        <div className="fixed inset-0 z-[100] bg-[#2E6FA8] xl:hidden flex flex-col overflow-hidden animate-in fade-in slide-in-from-top duration-300">
           {/* Top Row: Brand Logo Panel (White BG) and Custom Dark Close Button */}
           <div className="bg-white px-5 py-4 flex items-center justify-between border-b border-slate-100 shadow-sm">
             {/* Logo Layout */}
@@ -284,8 +282,7 @@ export default function Header() {
               className="flex items-center gap-2.5 cursor-pointer" 
               onClick={() => { 
                 closeDrawer(); 
-                window.history.pushState(null, "", "/home");
-                window.dispatchEvent(new Event("popstate"));
+                window.location.hash = "#home";
               }}
             >
               {header.logoUrl ? (
@@ -308,7 +305,7 @@ export default function Header() {
             {/* Premium Dark Navy Rounded Close Button with white close icon */}
             <button
               onClick={closeDrawer}
-              className="p-3 bg-[#243D7A] hover:bg-[#2E6FA8] text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center transform active:scale-95"
+              className="p-3 bg-[#2E6FA8] hover:bg-[#243D7A] text-white rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center transform active:scale-95"
               aria-label="Close menu"
             >
               <X className="w-5 h-5 stroke-[2.5]" />
@@ -316,7 +313,7 @@ export default function Header() {
           </div>
 
           {/* Scrolling Corporate Dark Navy List Menu panel */}
-          <div className="flex-1 bg-[#243D7A] overflow-y-auto px-5 py-4 pb-12">
+          <div className="flex-1 bg-[#2E6FA8] overflow-y-auto px-5 py-4 pb-12">
             <nav className="flex flex-col">
               {menuItems.map((item) => {
                 const isExpanded = expandedMenu === item.name;
@@ -361,7 +358,7 @@ export default function Header() {
 
                     {/* Level 2 Submenus container (Initially Closed, toggles on parent click) */}
                     {item.hasDropdown && item.dropdownItems && isExpanded && (
-                      <div className="mt-1 ml-4 pl-3 border-l-2 border-indigo-500/40   flex flex-col gap-1 py-1.5 bg-[#182A55]/80 rounded-xl overflow-hidden transition-all duration-300">
+                      <div className="mt-1 ml-4 pl-3 border-l-2 border-indigo-500/40   flex flex-col gap-1 py-1.5 bg-[#1b456a]/80 rounded-xl overflow-hidden transition-all duration-300">
                         {item.dropdownItems.map((subItem) => {
                           const isSubExpanded = expandedSubmenu === subItem.name;
                           return (
@@ -379,7 +376,7 @@ export default function Header() {
 
                                   {/* Level 3 Sub-submenu Items (Initially Closed, toggles on click) */}
                                   {isSubExpanded && (
-                                    <div className="ml-5 pl-3 mt-1 mb-1 border-l border-indigo-400/30 flex flex-col gap-1.5 py-1 bg-[#111E3C]/95 rounded-lg">
+                                    <div className="ml-5 pl-3 mt-1 mb-1 border-l border-indigo-400/30 flex flex-col gap-1.5 py-1 bg-[#0a1b2a]/95 rounded-lg">
                                       {subItem.submenuItems.map((nestedItem) => (
                                         <a
                                           key={nestedItem.name}

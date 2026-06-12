@@ -53,8 +53,7 @@ export default function Footer() {
   };
 
   const handleScrollToSection = (id: string) => {
-    window.history.pushState(null, "", `/${id}`);
-    window.dispatchEvent(new Event("popstate"));
+    window.location.hash = "#" + id;
   };
 
   const getSocialIcon = (platform: string) => {
@@ -111,15 +110,18 @@ export default function Footer() {
 
   const handleQuickLinkClick = (url: string, e?: React.MouseEvent) => {
     if (e) e.preventDefault();
-    let targetUrl = url;
-    if (url.startsWith("#")) {
-      targetUrl = "/" + url.replace("#", "");
+    
+    let target = url;
+    if (target.startsWith("/")) {
+      target = "#" + target.substring(1);
+    } else if (!target.startsWith("#") && !target.startsWith("http") && !target.includes(".")) {
+      target = "#" + target;
     }
-    if (targetUrl.startsWith("/")) {
-      window.history.pushState(null, "", targetUrl);
-      window.dispatchEvent(new Event("popstate"));
+
+    if (target.startsWith("#")) {
+      window.location.hash = target;
     } else {
-      window.location.href = targetUrl;
+      window.location.href = target;
     }
   };
 

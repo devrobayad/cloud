@@ -2,8 +2,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
-  --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-display: ui-sans-serif, system-ui, sans-serif;
 
   /* Corporate Brand Color variables mapping */
   --color-brand-light: #3A9AD9;
@@ -16,37 +16,44 @@
   --color-indigo-200: #bae0f3;
   --color-indigo-300: #8ecdef;
   --color-indigo-400: #3A9AD9;
-  --color-indigo-500: #3A9AD9; /* Light Blue */
-  --color-indigo-600: #2E6FA8; /* Medium Blue */
-  --color-indigo-700: #243D7A; /* Dark Blue */
-  --color-indigo-800: #1d3162;
-  --color-indigo-900: #19274e;
-  --color-indigo-950: #101931;
+  --color-indigo-500: #2E6FA8; /* Main - Medium Blue */
+  --color-indigo-600: #243D7A; /* Darker Main Blue for Hover */
+  --color-indigo-700: #1b456a; /* Extra Dark Blue */
+  --color-indigo-800: #122e47;
+  --color-indigo-900: #0a1b2a;
+  --color-indigo-950: #050e15;
 
-  --color-blue-500: #3A9AD9;
-  --color-blue-600: #2E6FA8;
-  --color-blue-700: #243D7A;
+  --color-blue-500: #2E6FA8;
+  --color-blue-600: #243D7A;
+  --color-blue-700: #1b456a;
   
-  --color-violet-500: #3A9AD9;
-  --color-violet-600: #2E6FA8;
-  --color-violet-700: #243D7A;
+  --color-violet-500: #2E6FA8;
+  --color-violet-600: #243D7A;
+  --color-violet-700: #1b456a;
 }
 
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans) !important;
-  font-size: 18px !important; /* Increases REM-based responsive font sizes by 2px globally (Default 16px -> 18px) */
+  font-size: 16px !important; /* Elegant 16px standard for laptop/small display devices */
 }
 
-/* Apply Poppins font family globally to all elements */
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px !important; /* Scales to 18px for large 22"+ screen real estate */
+  }
+}
+
+/* Apply ui-sans-serif, system-ui, sans-serif font family globally to all elements */
 *, *::before, *::after {
-  font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
+  font-family: ui-sans-serif, system-ui, sans-serif !important;
 }
 
-/* Custom layout container override to occupy 90% structure width on wide viewports (৯টি পার্সেন্ট উইডথ কনটেইনার) */
+/* Custom layout container override to occupy 90% structure width on wide viewports with a solid max-width safety limit */
 @media (min-width: 1024px) {
   .max-w-7xl {
-    max-width: 90% !important;
+    width: 90% !important;
+    max-width: 1360px !important;
   }
 }
 
@@ -91,6 +98,30 @@ div[class*="bg-[#243D7A]"] nav button * {
   font-size: 16px !important;
 }
 
+@media (min-width: 1280px) and (max-width: 1440px) {
+  header nav a,
+  header nav button,
+  header nav a *,
+  header nav button *,
+  div[class*="bg-[#16143c]"] nav a,
+  div[class*="bg-[#16143c]"] nav button,
+  div[class*="bg-[#16143c]"] nav a *,
+  div[class*="bg-[#16143c]"] nav button *,
+  div[class*="bg-[#243D7A]"] nav a,
+  div[class*="bg-[#243D7A]"] nav button,
+  div[class*="bg-[#243D7A]"] nav a *,
+  div[class*="bg-[#243D7A]"] nav button * {
+    font-size: 13.5px !important;
+  }
+  header nav a {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+  header nav {
+    gap: 3px !important;
+  }
+}
+
 /* Slider CTA buttons, navigation buttons, and text color to exactly #ffffff (স্লাইডারের সকল বাটনের টেক্সট কালার সাদা) */
 #home a,
 #home button,
@@ -106,10 +137,21 @@ div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth
   font-size: 44px !important;
 }
 
-/* Highly targeted CSS selector rule added for user selected element */
-div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > section#about:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3),
-div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) {
-  margin-right: 230px !important;
+/* Responsive margins for targeted background image collage to prevent layout breaking across desktop viewports */
+@media (min-width: 1280px) {
+  div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > section#about:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3),
+  div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) {
+    margin-right: 230px !important;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > section#about:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3),
+  div#root:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section#about:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) {
+    margin-right: 32px !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
+    bottom: 20px !important;
+  }
 }
 
 

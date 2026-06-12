@@ -50,7 +50,7 @@ export default function About() {
           {/* DESKTOP VIEW ONLY (perfect alignment as before, completely restored) */}
           <div 
             style={{ marginBottom: "0px" }}
-            className="hidden lg:col-span-12 xl:col-span-5 lg:col-span-5 lg:relative lg:flex lg:justify-start lg:py-0 lg:mb-0 z-10"
+            className="hidden lg:col-span-5 lg:relative lg:flex lg:justify-start lg:py-0 lg:mb-0 z-10"
           >
             <ScrollReveal direction="right" duration={0.8}>
               {/* Dots Pattern Accent */}
@@ -71,7 +71,7 @@ export default function About() {
               
               {/* Overlapping Image (Isometric Network Server Rack) positioned front-right with NO border */}
               <div 
-                style={{ bottom: "71px", marginRight: "90px", marginBottom: "-200px", width: "270px", height: "270px" }}
+                style={{ bottom: "71px", marginRight: "80px", marginBottom: "-200px", width: "300px", height: "300px" }}
                 className="absolute -right-2 sm:right-6 lg:-right-6 rounded-[28px] overflow-hidden shadow-[0_30px_70px_-10px_rgba(79,70,229,0.22)] border-none transform hover:scale-[1.03] transition-all duration-500 z-20 flex bg-indigo-950 p-0.5"
               >
                 <img
@@ -215,7 +215,7 @@ export default function About() {
                 <button 
                   onClick={handleScrollToContact}
                   style={{ width: "180px", marginRight: "0px" }}
-                  className="px-6 py-4 bg-indigo-950 hover:bg-indigo-900 text-white font-extrabold text-[13px] rounded-full flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-950/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer group w-[180px]"
+                  className="px-6 py-4 bg-[#2E6FA8] hover:bg-[#243D7A] text-white font-extrabold text-[13px] rounded-full flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-950/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer group w-[180px]"
                 >
                   More About Us
                   <span className="bg-white/10 p-1 rounded-full group-hover:translate-x-1 transition-transform duration-300">

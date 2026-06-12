@@ -352,7 +352,7 @@ export default function CareerPage() {
 
                   <button 
                     type="submit"
-                    className="w-full bg-[#243D7A] hover:bg-[#2E6FA8] text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer h-12"
+                    className="w-full bg-[#2E6FA8] hover:bg-[#243D7A] text-white font-extrabold text-xs py-3.5 rounded-xl uppercase tracking-wider transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer h-12"
                   >
                     <Send className="w-4 h-4 ml-1" />
                     Submit Application

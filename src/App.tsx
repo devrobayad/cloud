@@ -77,29 +77,25 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       let hash = window.location.hash;
-      let path = window.location.pathname;
-
-      // Automatically upgrade hash routing if present to prevent # in address bar
+      
+      // Normalize hash (e.g., #contact -> contact, #/contact -> contact)
+      let pageKey = "home";
       if (hash) {
-        const key = hash.replace("#", "");
-        if (key) {
-          window.history.replaceState(null, "", `/${key}`);
-          path = `/${key}`;
-          hash = "";
+        pageKey = hash.replace(/^#\/?/, "");
+      } else {
+        // Fallback to checking pathname in case they landed on a pathname URL
+        const path = window.location.pathname;
+        const cleanPath = path.replace(/^\//, "");
+        if (cleanPath && cleanPath !== "index.html") {
+          pageKey = cleanPath;
         }
       }
 
-      // Automatically default "/" path to "/home"
-      if (path === "/" || path === "") {
-        window.history.replaceState(null, "", "/home");
-        path = "/home";
-      }
+      if (!pageKey) pageKey = "home";
 
       const performScroll = (options: ScrollToOptions) => {
         window.scrollTo(options);
       };
-
-      let pageKey = path.replace(/^\//, "");
 
       if (pageKey === "home") {
         setCurrentPage("home");

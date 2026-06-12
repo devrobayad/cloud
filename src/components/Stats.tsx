@@ -63,7 +63,10 @@ export default function Stats() {
                     <span className="text-slate-200 font-bold text-xs mt-1">
                       {stat.label}
                     </span>
-                    <span className="text-slate-500 text-[10px] leading-relaxed mt-0.5">
+                    <span 
+                      className="text-slate-500 text-[10px] leading-relaxed mt-0.5"
+                      style={idx === 3 ? { fontSize: "13.5px" } : undefined}
+                    >
                       {stat.sub}
                     </span>
                   </div>
